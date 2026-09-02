@@ -1,0 +1,18 @@
+{
+  "name": "lesson-Y1-00-rentree",
+  "private": true,
+  "scripts": {
+    "dev": "slidev --open",
+    "build": "slidev build --base /Y1/00-rentree/ --out ../../dist/Y1/00-rentree",
+    "export": "slidev export --output ../../dist/Y1-00-rentree.pdf",
+    "assets": "node ../../scripts/fetch-assets.mjs"
+  },
+  "dependencies": {
+    "@slidev/cli": "^51.0.0",
+    "@slidev/types": "^51.0.0",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "playwright-chromium": "^1.48.0"
+  }
+}

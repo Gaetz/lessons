@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.slidev/
+*.local
+.DS_Store
+
+# assets lourds : jamais dans git, récupérés par `pnpm assets`
+*/*/public/heavy/

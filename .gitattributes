@@ -1,0 +1,6 @@
+# modèles 3D et textures : LFS
+*.glb   filter=lfs diff=lfs merge=lfs -text
+*.gltf  filter=lfs diff=lfs merge=lfs -text
+*.exr   filter=lfs diff=lfs merge=lfs -text
+*.hdr   filter=lfs diff=lfs merge=lfs -text
+# la vidéo ne passe PAS par LFS (quota) : voir <leçon>/assets.json

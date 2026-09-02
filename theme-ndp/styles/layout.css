@@ -1,0 +1,85 @@
+/* ---------------------------------------------------------------
+   Charte Notre-Dame Providence / ARTFX
+   Couleurs extraites du deck institutionnel (theme1.xml + slides)
+   --------------------------------------------------------------- */
+:root {
+  --ndp-orange: #EA5027;   /* ARTFX / couverture */
+  --ndp-cream:  #EDEEDA;   /* texte sur fond noir */
+  --ndp-ink:    #000000;
+  --ndp-blue:   #0F6FA5;   /* bleu du logo Notre-Dame Providence */
+  --ndp-sand:   #FCE5CD;
+  --ndp-gold:   #FFD966;
+  --ndp-grey:   #595959;
+
+  --slidev-theme-primary: var(--ndp-orange);
+}
+
+.slidev-layout {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-weight: 500;              /* Raleway Medium, comme le deck d'origine */
+  padding: 2.2rem 3rem 3rem;
+  color: var(--ndp-ink);
+  background: #fff;
+}
+
+.slidev-layout h1 {
+  font-weight: 900;              /* Raleway Black */
+  font-size: 2.6rem;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 1.2rem;
+}
+.slidev-layout h2 { font-weight: 800; font-size: 1.6rem; margin-bottom: .6rem; }
+.slidev-layout h3 { font-weight: 700; font-size: 1.15rem; color: var(--ndp-grey); }
+
+.slidev-layout ul { margin-left: .2rem; }
+.slidev-layout li { margin: .38em 0; }
+.slidev-layout li::marker { color: var(--ndp-orange); }
+
+.slidev-layout strong { font-weight: 800; }
+.slidev-layout a { color: var(--ndp-blue); }
+
+/* fil d'ariane, en haut a gauche, comme dans le deck d'origine */
+.ndp-breadcrumb {
+  position: absolute; top: .9rem; left: 3rem;
+  font-size: .62rem; font-weight: 500; letter-spacing: .01em;
+  color: var(--ndp-grey);
+}
+.ndp-dark .ndp-breadcrumb { color: var(--ndp-cream); }
+
+/* pastille de logos */
+.ndp-logos { position: absolute; display: flex; align-items: center; gap: .55rem; }
+.ndp-logos img { display: block; }
+
+/* filet de pied de page */
+.ndp-rule {
+  position: absolute; left: 0; right: 0; bottom: 2.1rem;
+  height: 1px; background: rgba(0,0,0,.18);
+}
+.ndp-dark .ndp-rule { background: rgba(237,238,218,.28); }
+
+/* variantes de fond */
+.ndp-dark  { background: var(--ndp-ink) !important;  color: var(--ndp-cream); }
+.ndp-dark h1, .ndp-dark h2, .ndp-dark h3 { color: var(--ndp-cream); }
+.ndp-brand { background: var(--ndp-orange) !important; color: #fff; }
+
+/* Contournement : fuse.js >= 7.5 renvoie tout sur une recherche vide, donc la
+   liste du dialogue « goto » de Slidev (touche g) reste affichée dialogue fermé
+   (le dialogue ouvert porte la classe top-5, fermé -top-20). */
+#slidev-goto-dialog:not(.top-5) .autocomplete-list { display: none; }
+
+/* credits d'images : minuscules, hors du flux, au ras du filet de pied de page */
+.ndp-credit {
+  position: absolute; left: 3rem; right: 3rem; bottom: 2.35rem;
+  font-size: .5rem; line-height: 1.35; opacity: .45; margin: 0;
+}
+
+/* code */
+.slidev-layout .slidev-code {
+  font-size: .8rem; border-radius: 2px;
+  border-left: 3px solid var(--ndp-orange);
+}

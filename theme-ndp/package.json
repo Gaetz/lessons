@@ -1,0 +1,21 @@
+{
+  "name": "slidev-theme-ndp",
+  "version": "0.1.0",
+  "keywords": ["slidev-theme", "slidev"],
+  "engines": { "slidev": ">=0.48.0" },
+  "slidev": {
+    "defaults": {
+      "aspectRatio": "16/9",
+      "canvasWidth": 980,
+      "fonts": {
+        "sans": "Raleway",
+        "serif": "Raleway",
+        "mono": "JetBrains Mono",
+        "weights": "300,400,500,600,800,900",
+        "provider": "google"
+      },
+      "highlighter": "shiki",
+      "transition": "fade"
+    }
+  }
+}

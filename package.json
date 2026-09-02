@@ -1,0 +1,10 @@
+{
+  "name": "lessons",
+  "private": true,
+  "description": "Cours de programmation 3D — présentations Slidev, une leçon par dossier, classées par année.",
+  "scripts": {
+    "lesson": "node scripts/lesson.mjs",
+    "new": "node scripts/new-lesson.mjs",
+    "list": "node scripts/lesson.mjs --list"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "_comment": "Assets lourds hors git. Heberge sur ton stockage, une URL par fichier.",
+  "files": {
+    "demoreel-artfx.mp4": "https://REMPLACER/demoreel-artfx.mp4",
+    "raymarch-fallback.mp4": "https://REMPLACER/raymarch-fallback.mp4"
+  }
+}

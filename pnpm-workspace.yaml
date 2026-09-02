@@ -1,0 +1,13 @@
+packages:
+  - 'theme-ndp'
+  - 'Y1/*'
+  - 'Y2/*'
+  - 'Y3/*'
+  - 'Y4/*'
+  - 'Y5/*'
+
+# pnpm 11 : autorisation explicite des scripts d'installation.
+# esbuild pose son binaire de plateforme, playwright télécharge Chromium (export PDF).
+allowBuilds:
+  esbuild: true
+  playwright-chromium: true
