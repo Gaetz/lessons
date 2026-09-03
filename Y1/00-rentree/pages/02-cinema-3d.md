@@ -405,7 +405,7 @@ breadcrumb: 2 — Cinéma et 3D / Débouchés
 
 # Et bien au-delà du divertissement
 
-Automobile, architecture, défense, jumeaux numériques, simulation, XR.
+Automobile, architecture, défense, traitement du signal, jumeaux numériques, simulation scientifique, XR...
 
 <div class="mt-6 text-sm op-70">Même savoir-faire. Marché beaucoup plus large. C'est ce qui sécurise votre avenir.</div>
 

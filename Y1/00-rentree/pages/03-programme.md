@@ -151,6 +151,32 @@ layout: default
 breadcrumb: 3 — Le programme
 ---
 
+# Une attitude professionnelle
+
+<div class="mt-8 text-lg">
+
+<v-clicks>
+
+- **Présence**
+- **Rendus en temps et en heure**
+- **Comportement et ouverture**
+
+</v-clicks>
+
+</div>
+
+<!--
+Deux règles, pas dix : c'est leur simplicité qui les rend non négociables.
+Les poser calmement, comme des évidences de studio — un professionnel est là,
+et il livre quand c'est dû. Enchaîne naturellement sur l'examen : le dossier
+de projets se construit précisément en rendant en temps et en heure.
+-->
+
+---
+layout: default
+breadcrumb: 3 — Le programme
+---
+
 # L'examen final, en fin de 2ᵉ année
 
 <div class="mt-8 grid grid-cols-2 gap-10 text-sm">
