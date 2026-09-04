@@ -1,0 +1,41 @@
+/* Leçon dense en code : on resserre la typographie par rapport au thème.
+   Chargé automatiquement par Slidev (style.css à la racine de la leçon). */
+
+/* titres plus compacts : « Étape draw() — ... » doit tenir sur une ligne */
+.slidev-layout h1 {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+.slidev-layout h1 code {
+  font-size: 0.85em;
+}
+
+/* blocs de code : plus petits et plus denses que le réglage du thème */
+.slidev-layout .slidev-code {
+  font-size: 0.62rem !important;
+  line-height: 1.4 !important;
+  padding: 0.6rem 0.8rem !important;
+}
+
+/* les listes sous le code : compactes */
+.slidev-layout li {
+  margin: 0.28em 0;
+}
+
+/* Leçon dense : pas de pied de page (filet + logos du bas), le contenu
+   récupère la place — mais une marge basse garantit que le texte ne colle
+   jamais le bord du document. Les logos du haut restent. */
+.ndp-rule {
+  display: none;
+}
+.ndp-logos[style*="bottom"] {
+  display: none;
+}
+.slidev-layout.ndp-content {
+  padding-bottom: 2.4rem;
+}
+
+/* la ligne de téléchargements descend dans l'espace libéré */
+.ndp-credit {
+  bottom: 0.9rem;
+}

@@ -24,6 +24,22 @@ importers:
         specifier: ^1.48.0
         version: 1.62.1
 
+  Y1/01-code-et-pixels:
+    dependencies:
+      '@slidev/cli':
+        specifier: ^51.0.0
+        version: 51.8.2(@babel/parser@7.29.8)(@nuxt/kit@3.21.11)(@types/markdown-it@14.2.0)(@types/node@22.20.1)(@vue/compiler-sfc@3.5.42)(markdown-it-async@2.2.0)(playwright-chromium@1.62.1)(postcss@8.5.26)
+      '@slidev/types':
+        specifier: ^51.0.0
+        version: 51.8.2(@nuxt/kit@3.21.11)(@vue/compiler-sfc@3.5.42)(markdown-it-async@2.2.0)(typescript@5.9.3)(vite@6.4.3(@types/node@22.20.1)(jiti@2.7.0)(yaml@2.9.0))
+      vue:
+        specifier: ^3.5.0
+        version: 3.5.42(typescript@5.9.3)
+    devDependencies:
+      playwright-chromium:
+        specifier: ^1.48.0
+        version: 1.62.1
+
   theme-ndp: {}
 
 packages:

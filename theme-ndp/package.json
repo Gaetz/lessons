@@ -15,6 +15,7 @@
         "provider": "google"
       },
       "highlighter": "shiki",
+      "colorSchema": "light",
       "transition": "fade"
     }
   }

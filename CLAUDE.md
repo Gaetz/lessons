@@ -37,6 +37,10 @@ Palette extraite du deck institutionnel, dans `theme-ndp/styles/layout.css` :
 Police : **Raleway** (Black 900 pour les titres, Medium 500 pour le corps),
 chargée par Google Fonts via le `fonts` du `package.json` du thème.
 
+Le thème force `colorSchema: light` (package.json) : la charte est fixe, et
+sans ça un navigateur en mode sombre rend les extraits de code illisibles
+(pastilles sombres sur diapos blanches). Ne pas retirer.
+
 Layouts : `cover` (orange, bandeau ARTFX pivoté sur la tranche droite),
 `section` (noir, titre crème en bas), `default` (blanc, fil d'ariane, logos, filet),
 `statement` (orange, phrase centrée), `split` (deux colonnes, slot `right`),
