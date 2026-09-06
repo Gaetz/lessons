@@ -52,6 +52,46 @@ Community suffit largement ; pas besoin de compte payant.
 
 ---
 layout: split
+breadcrumb: Installation / 1. Visual Studio
+---
+
+# 1 bis — Ajouter le composant MSVC v143
+
+<div class="mt-4 text-sm">
+
+<v-clicks>
+
+- Toujours dans l'installeur, passer sur l'onglet **Composants individuels**
+- Taper **`v143`** dans le champ de recherche
+- Cocher **« MSVC v143 — outils de build C++ VS 2022 x64/x86 (v14.44-17.14) »** — s'il y a plusieurs versions, les cocher
+- Puis *Installer* / *Modifier*
+
+</v-clicks>
+
+</div>
+
+<div v-click class="mt-4 text-sm op-70">
+Pourquoi : le projet openFrameworks compile avec la chaîne
+d'outils <b>v143</b> (celle de VS 2022). Sans ce composant,
+Visual Studio 2026 refuse de compiler : <i>« Build Tools for
+v143 cannot be found »</i>.
+</div>
+
+::right::
+
+<div>
+<ZoomImage src="/install/vs-composants-individuels.png" alt="Installeur Visual Studio 2026 : l'onglet Composants individuels et son champ de recherche" class="w-full object-contain" />
+<p class="mt-2 text-xs op-60">L'onglet Composants individuels de l'installeur 2026 — taper v143 dans la recherche en haut à gauche.</p>
+</div>
+
+<!--
+Si VS est déjà installé sans le composant : menu Démarrer → Visual Studio
+Installer → Modifier → même onglet. C'est l'oubli le plus fréquent après
+la charge de travail C++.
+-->
+
+---
+layout: split
 breadcrumb: Installation / 2. openFrameworks
 ---
 
@@ -172,7 +212,7 @@ l'include par `#include "ofAppNN.h"`.
 <p class="mt-2 text-xs op-60">Le projet généré, ouvert dans Visual Studio 2026.</p>
 </div>
 
-<p class="ndp-credit">Captures : guide officiel openFrameworks (docs du projet, licence MIT) — openframeworks.cc/setup/vs</p>
+<p class="ndp-credit">📄 <a href="/ressources/cours/pdf/00-environnement.pdf" download>tutoriel complet (PDF)</a> · <a href="/ressources/cours/00-environnement.md" download>md</a> · Captures : guide openFrameworks (MIT) et documentation Visual Studio (CC BY 4.0, learn.microsoft.com)</p>
 
 <!--
 Si la compilation échoue dès le départ : 90 % du temps, c'est le dézippage

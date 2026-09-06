@@ -31,6 +31,15 @@ L'ordre des blocs ne suit PAS la numérotation des cours : la couleur avancée
 17 (indice y·w+x), 11e du 16 (polaire) et 11g des 12 et 14 (distance, gros
 pixels) — dépendances déclarées dans les en-têtes « Avant : » des documents.
 
+## Ressources du cours vs fichiers de l'étudiant
+
+Les paires `ofAppNN.h`/`.cpp` sont la **référence de l'auteur** (téléchargeable,
+et corrigé). L'étudiant, lui, ne crée aucun fichier : il modifie `ofApp.h` et
+`ofApp.cpp`, qui existent par défaut dans son projet. Le document du cours 00
+donne le code complet à y coller (section 2) AVANT de l'expliquer ; à partir
+du cours 01, la méthode générale est de copier la paire `ofAppNN` dans `src/`
+et de changer l'include de `main.cpp` (documentée dans 00-environnement.md).
+
 ## Le dossier ressources
 
 `public/ressources/` reproduit la structure d'origine (INDEX.md, ofApp*.h/cpp,
@@ -78,6 +87,16 @@ du 07, ne l'ouvrir qu'après).
     pnpm lesson export Y1/01-code-et-pixels    # PDF pour distribution
 
 ## À savoir
+
+- **Repère visuel de la pratique : bleu NDP** (orange = information). Dans les
+  documents, un bloc d'essai s'écrit en citation commençant par `**Essaie**`
+  (ou À toi/Exercice) → encadré bleu dans le PDF ; les sections `## Exercices`
+  et `## Autonomie` sont enveloppées de bleu automatiquement par docs-pdf.mjs.
+- **Diapos, document, PDF avancent ensemble.** Toute modification de contenu
+  dans les diapos se reporte dans le document `cours/*.md` correspondant, et
+  les PDF se régénèrent dans la foulée (`node scripts/docs-pdf.mjs
+  Y1/01-code-et-pixels`, depuis la racine). Ne jamais laisser les trois
+  supports diverger.
 
 - **La source de vérité du contenu est `public/ressources/`** (versionnée) —
   le dossier `~/Downloads/of_cours` d'origine est en retard sur elle.

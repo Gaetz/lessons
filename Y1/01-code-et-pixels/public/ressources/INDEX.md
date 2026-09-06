@@ -4,7 +4,7 @@
 
 **Utilisation** : copier la paire dans `src/`, remplacer `#include "ofApp.h"` par `#include "ofAppNN.h"` dans `main.cpp`. Les images vont dans `bin/data/`.
 
-**Cours écrits** : un document Markdown par leçon dans [`cours/`](cours/README.md), avec illustrations, pour des débutants qui découvrent le C++.
+**Cours écrits** : un document Markdown par leçon dans [`cours/`](cours/README.md), avec illustrations, pour des débutants qui découvrent le C++. Pour installer les outils (Visual Studio 2026, openFrameworks) : [Préparation de l'environnement de développement](cours/00-environnement.md).
 
 ## Progression
 

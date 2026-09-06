@@ -22,6 +22,8 @@ Chaque ligne crée une variable. Lecture de gauche à droite :
 | `sizeX` | le **nom**, choisi par toi. Pas d'espace, pas d'accent, pas de chiffre au début |
 | `= 400` | la valeur de départ |
 
+Au cours 00, tu as initialisé avec des accolades : `int x { 100 };`. Le signe `=` fait la même chose, et tu le croiseras partout (dans ce module et dans les exemples openFrameworks) — les accolades restent l'écriture recommandée, car elles refusent les conversions perdantes : `int x { 3.7 };` ne compile pas, `int x = 3.7;` tronque en silence.
+
 En C++, une variable a toujours un type, fixé une fois pour toutes. Les deux types dont tu as besoin pour l'instant :
 
 | Type | Contenu | Exemples |

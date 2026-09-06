@@ -10,9 +10,9 @@ void ofApp::update() {
 
 void ofApp::draw() {
 	// Deux variables : elles décalent toute la tête d'un coup.
-	// Essaie x = 100, puis y = -50.
-	float x = 0;
-	float y = 0;
+	// Essaie x { 100 }, puis y { -50 }.
+	int x { 0 };
+	int y { 0 };
 
 	// Le visage : ofDrawCircle est une fonction toute faite,
 	// on l'appelle avec des paramètres (position x, position y, rayon).

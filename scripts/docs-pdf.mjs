@@ -40,12 +40,13 @@ const md = new MarkdownIt({ html: true, linkify: false, typographer: false })
 
 // Charte NDP/ARTFX, version imprimable
 const CSS = `
-  @page { margin: 0; }
+  /* Pas de règle @page ici : elle prendrait le pas sur les marges passées à
+     page.pdf(), et le texte filerait jusqu'au bord en chevauchant le footer. */
   * { box-sizing: border-box; }
   body {
     font-family: 'Raleway', 'Helvetica Neue', Arial, sans-serif;
     font-size: 10.5pt; line-height: 1.55; color: #111;
-    margin: 0; padding: 2cm 1.8cm;
+    margin: 0; padding: 0 1.8cm;
   }
   h1 { font-size: 20pt; font-weight: 900; line-height: 1.15; margin: 0 0 .8em;
        padding-bottom: .35em; border-bottom: 2.5pt solid #EA5027; }
@@ -58,6 +59,11 @@ const CSS = `
   blockquote { margin: .8em 0; padding: .5em .9em; background: #f4f4ef;
        border-left: 3pt solid #EA5027; }
   blockquote p { margin: .25em 0; }
+  /* Repère visuel de la pratique : bleu NDP (les encadrés d'info restent orange) */
+  blockquote.essai { background: #eef3f8; border-left-color: #0F6FA5; }
+  .exercices { margin: 1em 0; padding: .2em 1em .6em; background: #eef3f8;
+       border-left: 3pt solid #0F6FA5; }
+  .exercices h2::before { background: #0F6FA5; }
   code { font-family: 'SF Mono', 'Cascadia Code', Consolas, Menlo, monospace;
        font-size: .88em; background: #f2f2ee; padding: .08em .3em; border-radius: 2px; }
   pre { background: #f6f6f2; border-left: 3pt solid #EA5027; border-radius: 2px;
@@ -79,7 +85,13 @@ const page = await browser.newPage()
 
 for (const f of files) {
   const src = await readFile(join(coursDir, f), 'utf8')
-  const body = md.render(src)
+  let body = md.render(src)
+  // Repère visuel bleu : les citations « Essaie / À toi / Exercice »…
+  body = body.replace(/<blockquote>\n(<p><strong>(?:Essaie|À toi|À vous|Exercice))/g,
+    '<blockquote class="essai">\n$1')
+  // … et les sections Exercices / Autonomie entières (jusqu'au titre suivant).
+  body = body.replace(/<h2>(Exercices|Autonomie)<\/h2>([\s\S]*?)(?=<h2>|$)/g,
+    '<div class="exercices"><h2>$1</h2>$2</div>')
   // <base> : les images relatives img/... se résolvent dans le dossier cours
   const html = `<!doctype html><html><head><meta charset="utf-8">
     <style>${CSS}</style></head><body>${body}</body></html>`
@@ -99,7 +111,7 @@ for (const f of files) {
         font-family: Arial; padding: 0 1.8cm; display:flex; justify-content:space-between;">
         <span>Code et pixels — BTS SIO SLAM, NDP &times; ARTFX</span>
         <span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`,
-    margin: { top: '1.4cm', bottom: '1.6cm', left: '0', right: '0' },
+    margin: { top: '2cm', bottom: '2.2cm', left: '0', right: '0' },
   })
   console.log('pdf :', basename(out))
 }

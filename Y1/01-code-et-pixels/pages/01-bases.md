@@ -14,8 +14,9 @@ breadcrumb: 1 — Les bases / Cours 00
 
 # Cours 00 — Premier contact
 
-Aujourd'hui on n'explique presque rien : on lance un programme
-qui dessine, on change des nombres, on relance, on regarde.
+Aujourd'hui on va apprendre les bases de la programmation
+en créant des images. Nous allons utiliser le langage **C++** :
+il s'agira de modifier les fichiers `ofApp.cpp` et `ofApp.h`.
 
 <div class="mt-6 text-sm">
 
@@ -33,7 +34,7 @@ qui dessine, on change des nombres, on relance, on regarde.
 
 <div>
 <ZoomImage src="/ressources/cours/img/00-visage.png" alt="Tête blanche translucide aux yeux rouges" class="w-full object-cover" />
-<p class="mt-2 text-xs op-60">Deux versions : la tête (ofApp00), puis la tête qui suit la souris (ofApp00a).</p>
+<p class="mt-2 text-xs op-60">Deux versions : la tête seule, puis la tête qui suit la souris.</p>
 </div>
 
 <!--
@@ -107,7 +108,7 @@ layout: default
 breadcrumb: 1 — Les bases / Cours 00
 ---
 
-# `ofApp00` — dessiner le visage
+# Le programme minimal — dessiner le visage
 
 ```cpp
 void ofApp::setup() {
@@ -148,10 +149,10 @@ layout: default
 breadcrumb: 1 — Les bases / Cours 00
 ---
 
-# `ofApp00a` — la version vivante : le `.h` et `setup()`
+# La version vivante — le `.h` et `setup()`
 
 ```cpp
-// ofApp00a.h : la table des matières du programme
+// ofApp.h : la table des matières du programme
 class ofApp : public ofBaseApp {
 public:
     void setup();  void update();  void draw();
@@ -159,7 +160,7 @@ public:
     float r = 0;  float g = 0;  float b = 0;   // partagées entre les blocs
 };
 
-// ofApp00a.cpp
+// ofApp.cpp
 void ofApp::setup() {
     ofSetWindowShape(800, 800);
 }

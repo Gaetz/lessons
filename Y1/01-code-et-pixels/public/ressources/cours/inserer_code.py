@@ -7,7 +7,9 @@ ICI = os.path.dirname(os.path.abspath(__file__))
 RACINE = os.path.join(ICI, '..')
 
 LECONS = {
-    '00-premier-contact.md': 'ofApp00a', '01-variables.md': 'ofApp01', '02-boucle-for.md': 'ofApp02',
+    # 00-premier-contact.md : exclu — la leçon construit le code pas à pas
+    # elle-même, la section « code complet » y ferait doublon.
+    '01-variables.md': 'ofApp01', '02-boucle-for.md': 'ofApp02',
     '03-aleatoire.md': 'ofApp03', '04-listes.md': 'ofApp04', '05-cycle-souris.md': 'ofApp05',
     '06-animation.md': 'ofApp06', '07-trainee.md': 'ofApp07', '08-trainee-evoluee.md': 'ofApp08',
     '09-couleur.md': 'ofApp09', '10-image-pixel.md': 'ofApp10', '11-filtres.md': 'ofApp11',

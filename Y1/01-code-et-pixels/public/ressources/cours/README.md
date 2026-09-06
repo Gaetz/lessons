@@ -4,6 +4,7 @@ Un document par leçon, pour des débutants qui découvrent le C++ avec openFram
 
 | # | Cours | Fichiers | Ce qu'on apprend |
 |---|---|---|---|
+| — | [Préparation de l'environnement](00-environnement.md) | aucun | installer Visual Studio 2026 et openFrameworks, créer un projet, compiler |
 | 00 | [Premier contact](00-premier-contact.md) | ofApp00 puis ofApp00a | repère de l'écran, fonctions et paramètres, variables, couleurs RGBA |
 | 01 | [Variables et opérations](01-variables.md) | ofApp01 | `int`, `float`, `=`, division entière, rayon |
 | 02 | [La boucle `for`](02-boucle-for.md) | ofApp02 | compteur, accumulation, fill et contour |

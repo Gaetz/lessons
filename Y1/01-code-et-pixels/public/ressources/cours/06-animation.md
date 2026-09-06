@@ -86,7 +86,7 @@ Les deux formes sont dessinées par rapport au même décalage, donc elles bouge
 2. Fais rebondir sur les vrais bords de la fenêtre au lieu de 250 et 180. Il faudra tenir compte de la taille des formes.
 3. Ajoute un cercle qui traverse l'écran de gauche à droite et **réapparaît à gauche** quand il sort, au lieu de rebondir. Un seul `if` suffit.
 4. Fais grossir et rétrécir le rectangle : une variable `taille` qui fait des allers-retours entre 50 et 150.
-5. Remplace le fond en allers-retours par la formule du cours 00 : `r = (cos(t * 1.5f) / 2 + 0.5f) * 255` avec `float t = ofGetElapsedTimef();` (le temps écoulé depuis le lancement, en secondes). `cos` oscille entre -1 et 1 ; `/ 2 + 0.5` le ramène entre 0 et 1 ; `* 255` entre 0 et 255. Le résultat est plus doux qu'une ligne droite. On y reviendra au cours 13.
+5. Remplace le fond en allers-retours par une formule plus douce : `r = (cos(t * 1.5f) / 2 + 0.5f) * 255` avec `float t = ofGetElapsedTimef();` (le temps écoulé depuis le lancement, en secondes). `cos` oscille entre -1 et 1 ; `/ 2 + 0.5` le ramène entre 0 et 1 ; `* 255` entre 0 et 255. Le résultat est plus doux qu'une ligne droite. On y reviendra au cours 13.
 
 ## Le code complet, pas à pas
 

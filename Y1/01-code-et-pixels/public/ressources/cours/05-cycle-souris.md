@@ -61,11 +61,9 @@ Au cours 01, `ofBackground` était dans `setup()`. Ça marchait parce que le des
 
 Tu peux maintenant relire `ofApp00a.cpp` et tout nommer :
 
-- `r`, `g`, `b` sont trois variables partagées, déclarées dans le `.h`.
-- `update()` les recalcule à chaque frame à partir du temps.
-- `draw()` efface avec `ofBackground(r, g, b)` puis dessine la tête à `(mouseX, mouseY)`.
-
-Seule la formule avec `cos` reste mystérieuse. Elle est expliquée au cours 06 et détaillée au cours 13.
+- `funnyFace` est une fonction à nous, annoncée dans le `.h`, avec deux paramètres.
+- `draw()` efface avec `ofBackground(30)` puis dessine la tête à `(mouseX, mouseY)`.
+- `update()` y était resté **vide** — tu sais maintenant à quoi il sert : c'est là que les nombres changent, et dès le cours 06 il fera bouger les choses tout seul.
 
 ## Exercices
 

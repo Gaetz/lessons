@@ -193,7 +193,7 @@ Les paramètres sur lesquels jouer, à combiner comme tu veux :
 | taille selon le temps | qui pulse ; plus fort à l'arrière qu'à l'avant |
 | transparence selon `i` | le quatrième nombre de `ofSetColor` : de transparent à opaque le long de la traînée |
 | remplissage et contour | deux passes (cours 02), avec des transparences opposées : l'un s'efface quand l'autre apparaît |
-| couleur de base | animée par le temps, comme le fond du cours 00 |
+| couleur de base | animée par le temps, comme le fond du cours 06 (exercice 5) |
 | couleur selon `i` | éclaircie ou assombrie vers l'avant, un canal qui monte le long de la traînée |
 | forme | cercle, carré, l'ours, ou une alternance selon la parité de `i` |
 
