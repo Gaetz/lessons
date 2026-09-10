@@ -22,8 +22,8 @@ public:
 
 	ofImage source;
 	ofImage resultat;
-	int  effet = 0;
-	bool aRecalculer = true;
+	int  effet { 0 };
+	bool aRecalculer { true };
 	std::vector<std::string> noms = {
 		"original", "flou boite", "flou gaussien", "nettete", "contours", "relief"
 	};

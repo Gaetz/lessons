@@ -105,7 +105,7 @@ def img01():
         c.circle(k * 75, 100, 37.5, fill=C(255, 255, 255))
     c.save('01-cercles.png')
 
-    c = Canvas(420, 260, PAPER)
+    c = Canvas(580, 260, PAPER)
     cx, cy, r = 130, 130, 90
     c.circle(cx, cy, r, outline=INK, width=3)
     c.circle(cx, cy, 4, fill=INK)

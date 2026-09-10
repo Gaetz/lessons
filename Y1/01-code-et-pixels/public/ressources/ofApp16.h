@@ -17,9 +17,9 @@ public:
 
 	void drawFlower(int fIndex, float r, float speed);
 
-	int   nbPoints = 200;
-	float amplitude = 15;     // hauteur des pétales
-	int   period = 7;         // nombre de pétales
-	int   nbFlowers = 14;
+	int   nbPoints { 200 };
+	float amplitude { 15 };     // hauteur des pétales
+	int   period { 7 };         // nombre de pétales
+	int   nbFlowers { 14 };
 	std::vector<float> rotations;
 };

@@ -15,7 +15,7 @@ public:
 	void update();
 	void draw();
 
-	int   nbCercles = 12;
-	float rayonOrbite = 200;
-	float t = 1;
+	int   nbCercles { 12 };
+	float rayonOrbite { 200 };
+	float t { 1 };
 };

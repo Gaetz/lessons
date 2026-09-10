@@ -199,9 +199,10 @@ breadcrumb: Installation / 4. Vérifier
 
 <div v-click class="mt-4 text-sm">
 
-Pour suivre les cours : copier la paire `ofAppNN.h` /
-`ofAppNN.cpp` dans `src\`, et dans `main.cpp` remplacer
-l'include par `#include "ofAppNN.h"`.
+Pour suivre les cours : tu travailleras **toujours dans
+`ofApp.h` et `ofApp.cpp`** (le code est donné par étapes).
+Les paires `ofAppNN` téléchargeables sont la référence,
+pour comparer ou repartir d'une base propre.
 
 </div>
 

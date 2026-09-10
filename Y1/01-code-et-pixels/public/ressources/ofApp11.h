@@ -21,8 +21,8 @@ public:
 
 	ofImage source;
 	ofImage resultat;
-	int   effet = 0;
-	float parametre = 0.5f;
+	int   effet { 0 };
+	float parametre { 0.5f };
 	std::vector<std::string> noms = {
 		"original", "negatif", "gris (moyenne)", "gris (luminance)", "luminosite",
 		"contraste", "seuil", "posterisation", "rotation de teinte", "color splash"

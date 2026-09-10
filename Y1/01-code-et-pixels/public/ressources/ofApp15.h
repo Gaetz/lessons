@@ -14,12 +14,12 @@ public:
 
 	void drawPoint(int i, int j, float angle);
 
-	int   screenSize = 400;
-	int   rows = 15;
-	int   cols = 15;
-	float tileSize = 0;      // calculé dans setup
-	float radius = 0;
-	float speed = 2.4f;      // radians par seconde (0.04 rad/frame x 60)
-	float globalAngle = 0;
-	float angleOffset = 75;
+	int   screenSize { 400 };
+	int   rows { 15 };
+	int   cols { 15 };
+	float tileSize { 0 };      // calculé dans setup
+	float radius { 0 };
+	float speed { 2.4f };      // radians par seconde (0.04 rad/frame x 60)
+	float globalAngle { 0 };
+	float angleOffset { 75 };
 };

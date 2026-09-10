@@ -11,14 +11,14 @@ void ofApp::update() {
 	float dt = ofGetLastFrameTime();
 
 	// ---- Déplacement ----
-	decalageX = decalageX + vx * dt;
-	decalageY = decalageY + vy * dt;
+	posX = posX + vx * dt;
+	posY = posY + vy * dt;
 
 	// ---- Rebonds : on inverse la vitesse quand on dépasse une limite ----
-	if (decalageY > 180) vy = -vy;
-	if (decalageY < -80) vy = -vy;
-	if (decalageX > 250) vx = -vx;
-	if (decalageX < 0)   vx = -vx;
+	if (posY > 180) vy = -vy;
+	if (posY < -80) vy = -vy;
+	if (posX > 250) vx = -vx;
+	if (posX < 0)   vx = -vx;
 
 	// ---- Couleur qui fait des allers-retours entre 0 et 255 ----
 	r = r + vr * dt;
@@ -40,7 +40,7 @@ void ofApp::draw() {
 	ofSetColor(255);
 	ofFill();
 	// rect(x, y, w, h) : coin haut-gauche, comme ofDrawRectangle par défaut
-	ofDrawRectangle(decalageX + 100, decalageY + 100, 100, 100);
+	ofDrawRectangle(posX + 100, posY + 100, 100, 100);
 	// ellipse(x, y, w, h) : centrée, comme ofDrawEllipse
-	ofDrawEllipse(decalageX + 50, decalageY + 150, 200, 150);
+	ofDrawEllipse(posX + 50, posY + 150, 200, 150);
 }

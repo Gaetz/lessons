@@ -17,6 +17,6 @@ public:
 
 	std::vector<float> prevX;
 	std::vector<float> prevY;
-	float r = 0, g = 0, b = 0;
-	float t = 0;
+	float r { 0 }, g { 0 }, b { 0 };
+	float t { 0 };
 };

@@ -15,5 +15,5 @@ public:
 
 	std::vector<float> prevX;
 	std::vector<float> prevY;
-	float t = 0;
+	float t { 0 };
 };

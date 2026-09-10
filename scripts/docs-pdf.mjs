@@ -90,7 +90,7 @@ for (const f of files) {
   body = body.replace(/<blockquote>\n(<p><strong>(?:Essaie|À toi|À vous|Exercice))/g,
     '<blockquote class="essai">\n$1')
   // … et les sections Exercices / Autonomie entières (jusqu'au titre suivant).
-  body = body.replace(/<h2>(Exercices|Autonomie)<\/h2>([\s\S]*?)(?=<h2>|$)/g,
+  body = body.replace(/<h2>(Exercices|Autonomie|Pour aller plus loin)<\/h2>([\s\S]*?)(?=<h2>|$)/g,
     '<div class="exercices"><h2>$1</h2>$2</div>')
   // <base> : les images relatives img/... se résolvent dans le dossier cours
   const html = `<!doctype html><html><head><meta charset="utf-8">

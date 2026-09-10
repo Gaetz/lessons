@@ -5,11 +5,15 @@ void ofApp::setup() {
 	ofBackground(200);
 }
 
+void ofApp::update() {
+
+}
+
 void ofApp::draw() {
-	float x = 0;
-	float y = 0;
-	float taille = 10;      // diamètre, comme dans le sketch Processing
-	int   b = 0;
+	float x { 0 };
+	float y { 0 };
+	float taille { 10 };      // diamètre, comme dans le sketch Processing
+	int   b { 0 };
 
 	// Syntaxe C++ de la boucle : for (initialisation; condition; incrément)
 	// Équivalent de : for i in range(0, 10):

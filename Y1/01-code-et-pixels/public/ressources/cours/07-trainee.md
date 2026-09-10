@@ -1,15 +1,15 @@
 # Cours 07 — Traînée : mémoriser les positions précédentes
 
-> **Fichiers** : `ofApp07.h` + `ofApp07.cpp`
 > **Avant** : cours 04 (`std::vector`), cours 05 (update / draw).
+> **Comment travailler** : toujours dans `ofApp.h` et `ofApp.cpp`, par versions successives. `ofApp07.h` / `ofApp07.cpp` : la référence téléchargeable de l'état final.
 
 Un ours suit la souris, et les cinquante positions précédentes restent affichées derrière lui. Deux outils nouveaux : écrire **nos propres fonctions**, et utiliser une liste comme **mémoire** des dernières frames.
 
 ![Une traînée d'ours blancs qui suit une courbe](img/07-trainee.png)
 
-## 1. Écrire sa propre fonction
+## 1. Étape 1 — `bear()` : ta propre fonction
 
-Depuis le cours 00 on utilise des fonctions fournies, comme `ofDrawCircle` — et on a lu `funnyFace`, une fonction fabriquée. On apprend maintenant à écrire les nôtres. Un ours, c'est six cercles et un rectangle. Plutôt que de recopier ces sept lignes à chaque fois, on les range dans une **fonction** :
+Depuis le cours 00 on utilise des fonctions fournies, comme `ofDrawCircle` — et on a lu `funnyFace`, une fonction fabriquée. Cette fois, tu écris la tienne. Un ours, c'est six cercles et un rectangle ; plutôt que de recopier ces sept lignes à chaque fois, on les range dans une **fonction** :
 
 ```cpp
 // Un ours dessiné autour du point (x, y)
@@ -22,7 +22,22 @@ void ofApp::bear(float x, float y) {
 	ofDrawCircle(x + 30, y - 20, 10);
 	ofDrawRectangle(x, y + 20, 50, 10);
 }
+
+void ofApp::draw() {
+	ofBackground(0);
+	ofSetColor(255);
+	ofFill();
+	bear(mouseX, mouseY);
+}
 ```
+
+Et dans le `.h`, **annonce** la fonction — une ligne, sans le corps, sinon le compilateur ne connaît pas `bear` quand il lit `draw()` :
+
+```cpp
+	void bear(float x, float y);
+```
+
+Un ours suit la souris. Anatomie de la définition :
 
 | Morceau | Rôle |
 |---|---|
@@ -31,17 +46,11 @@ void ofApp::bear(float x, float y) {
 | `float x, float y` | ses **paramètres** : deux nombres que celui qui appelle doit fournir |
 | `{ ... }` | son corps : ce qu'elle fait |
 
-Toutes les positions à l'intérieur sont écrites **par rapport à `(x, y)`** : `x - 25`, `y + 20`. C'est ce qui rend l'ours déplaçable. Appeler `bear(100, 100)` dessine un ours autour de (100, 100), `bear(mouseX, mouseY)` un ours sous la souris. C'est exactement ce que faisait `funnyFace` au cours 00.
+Toutes les positions à l'intérieur sont écrites **par rapport à `(x, y)`** : `x - 25`, `y + 20`. C'est ce qui rend l'ours déplaçable — `bear(100, 100)` en dessine un autour de (100, 100). Exactement ce que faisait `funnyFace` au cours 00.
 
-Il faut aussi **annoncer** la fonction dans le fichier `.h`, une ligne qui donne son nom et ses paramètres, sans le corps :
+> **Essaie** : écris ta propre fonction `void etoile(float x, float y)` (ou n'importe quelle figure) et remplace l'ours.
 
-```cpp
-void bear(float x, float y);
-```
-
-Sans cette ligne, le compilateur ne connaît pas `bear` quand il lit `draw()`.
-
-### Les paramètres sont des copies
+## 2. Étape 2 — les paramètres sont des copies
 
 Quand on appelle `bear(mouseX, mouseY)`, la fonction ne reçoit pas les variables de l'appelant : elle reçoit des **copies**. Ses cases `x` et `y` (cours 01) naissent à l'appel, reçoivent les valeurs copiées, et meurent à l'accolade fermante :
 
@@ -55,54 +64,64 @@ Quand on appelle `bear(mouseX, mouseY)`, la fonction ne reçoit pas les variable
 
 Conséquence : modifier `x` à l'intérieur de `bear` ne change **pas** `mouseX` — une fonction ne peut pas abîmer les variables de son appelant, et chaque appel repart de cases neuves. C'est le **passage par valeur**. Quand une fonction devra *fabriquer* une valeur pour son appelant, elle la **renverra** avec `return` : tu le verras au cours 11 avec `filtre()`.
 
-## 2. Une liste comme mémoire
+> **Essaie** : ajoute `x = 0;` en première ligne de `bear` — l'ours se fige à gauche, mais la souris (et `mouseX`) continue de vivre sa vie. La copie protège l'appelant.
+
+## 3. Étape 3 — une liste comme mémoire : la file
+
+Dans le `.h`, la position et deux listes partagées :
 
 ```cpp
-// dans le .h
-std::vector<float> xCoords;
-std::vector<float> yCoords;
+	float x { 0 };
+	float y { 0 };
+	std::vector<float> xCoords;
+	std::vector<float> yCoords;
 ```
 
-```cpp
-// dans update()
-xCoords.push_back(x);
-yCoords.push_back(y);
+Dans `update()` :
 
-if (xCoords.size() >= 50) {
-	xCoords.erase(xCoords.begin());
-	yCoords.erase(yCoords.begin());
+```cpp
+void ofApp::update() {
+	xCoords.push_back(x);                    // 1. mémoriser la position courante
+	yCoords.push_back(y);
+
+	if (xCoords.size() >= 50) {              // 2. borner la mémoire :
+		xCoords.erase(xCoords.begin());      //    retirer la plus ancienne
+		yCoords.erase(yCoords.begin());
+	}
+
+	x = mouseX;                              // 3. mettre à jour
+	y = mouseY;
 }
-
-x = mouseX;
-y = mouseY;
 ```
 
-À chaque frame :
+À l'écran, rien de neuf — la mémoire se remplit en coulisses. Affiche `xCoords.size()` dans la console (cours 04) : elle monte jusqu'à 50 et s'y stabilise.
 
-1. On **ajoute** la position courante à la fin des deux listes.
-2. Si la liste dépasse 50, on **retire le premier** élément, le plus ancien. `erase(begin())` est la façon de dire « supprime l'élément d'indice 0 ». Les autres se décalent.
-3. On met à jour la position avec la souris.
+À chaque frame : on **ajoute** la position courante à la fin, si la liste dépasse 50 on **retire le premier** élément (`erase(begin())` : « supprime l'élément d'indice 0 », les autres se décalent), puis on met à jour la position. L'ordre compte : mémoriser **avant** de mettre à jour, sinon la position courante serait en double.
 
-L'ordre compte : on mémorise **avant** de mettre à jour, sinon la liste contiendrait la position courante en double.
+Une liste où l'on ajoute à la fin et retire au début s'appelle une **file**. Bornée à 50, elle contient toujours les 50 dernières positions — ni plus, ni moins.
 
-Une liste où on ajoute à la fin et retire au début s'appelle une **file**. Ici sa taille est bornée à 50 : elle contient toujours les 50 dernières positions, ni plus ni moins.
+Dernier point : deux listes **parallèles**. `xCoords[i]` et `yCoords[i]` forment ensemble la position numéro `i` — il faut toujours les modifier ensemble.
 
-Deux listes parallèles : `xCoords[i]` et `yCoords[i]` forment ensemble la position numéro `i`. Il faut toujours les modifier ensemble.
+> **Essaie** : change 50 en 10, puis en 200 (tu verras l'effet à l'étape 4). Puis, *plus fin* : ne mémorise qu'une frame sur deux — indice : une variable partagée `int compteur` et `%` (le reste de la division : `compteur % 2` vaut 0 une frame sur deux).
 
-## 3. Dessiner toute la mémoire
+## 4. Étape 4 — dessiner toute la mémoire
 
 ![La même traînée, du gris foncé pour les anciennes positions au blanc pour la récente](img/07-trainee-indices.png)
 
+Dans `draw()` :
+
 ```cpp
-for (int i = 0; i < xCoords.size(); i++) {
-	bear(xCoords[i], yCoords[i]);
-}
-bear(x, y);
+	for (int i = 0; i < xCoords.size(); i++) {
+		bear(xCoords[i], yCoords[i]);
+	}
+	bear(x, y);
 ```
 
-La boucle du cours 04 : pour chaque position mémorisée, un ours. L'indice 0 est le plus ancien, `size() - 1` le plus récent. Puis l'ours courant par-dessus.
+La boucle du cours 04 : un ours par position mémorisée. L'indice 0 est le plus **ancien**, `size() - 1` le plus récent. Puis l'ours courant, par-dessus.
 
-Cinquante ours blancs identiques se fondent en une masse. Le cours 08 fait varier couleur, transparence et taille selon `i`, ce qui redonne la sensation de profondeur.
+Cinquante ours blancs identiques se fondent en une masse — c'est **exprès** : le cours 08 fera varier couleur, transparence et taille selon `i`, et la profondeur apparaîtra.
+
+> **Essaie** : `ofSetColor(i * 5);` dans la boucle — un gris qui s'éclaircit vers les positions récentes. Premier aperçu du cours 08.
 
 ## Pour aller plus loin : une `struct`
 
@@ -168,11 +187,21 @@ openFrameworks fournit `glm::vec2`, qui est exactement cette struct avec des op�
 
 ## Exercices
 
-1. Change 50 en 10, puis en 200.
-2. Écris une fonction `void ofApp::etoile(float x, float y)` et remplace l'ours.
-3. Ajoute un paramètre `float taille` à `bear` et fais que tout soit proportionnel : `x - taille / 2`, etc.
-4. Ne mémorise la position qu'une frame sur deux. Indice : une variable partagée `int compteur` et `%`.
-5. Fais varier la couleur selon `i` dans la boucle : `ofSetColor(i * 5)` donne un gris qui s'éclaircit vers les positions récentes.
+1. **Lire avant de lancer** — la file est bornée à 5, et `draw()` contient :
+
+   ```cpp
+   for (int i = 0; i < xCoords.size(); i++) {
+   	ofDrawCircle(xCoords[i], yCoords[i], 5 + i * 5);
+   }
+   ```
+
+   Le plus gros cercle est-il sous la souris, ou en queue de traînée ? Réponds, puis vérifie.
+
+2. **Le serpent réglable** — la longueur de la file dépend de la souris : on retire des éléments tant que `size()` dépasse `mouseX / 10`. Souris à gauche : serpent court ; à droite : long. Attention, il faudra peut-être retirer **plusieurs** éléments dans la même frame.
+
+3. **Les deux traînées** — une deuxième file qui mémorise le point **opposé** à la souris (cours 05, exercice 2). Deux traînées miroir qui dansent ensemble.
+
+4. **La constellation filante** *(plus costaud)* — combine 03, 04 et 07 : cinquante étoiles fixes (listes remplies dans `setup()`), plus une traînée qui suit la souris. Deux mémoires de natures différentes dans le même programme : l'une remplie une fois, l'autre entretenue à chaque frame.
 
 ## Autonomie
 
@@ -203,137 +232,10 @@ Les contraintes :
 - tes nombres doivent rester dans leurs bornes : une taille ne devient pas négative, une composante de couleur reste entre 0 et 255. Avant d'écrire une formule, note la valeur qu'elle donne pour `i = 0` et pour le dernier `i` ;
 - change **une seule chose à la fois**, lance, regarde, puis passe à la suivante.
 
-## Le code complet, pas à pas
-
-Le programme entier, dans l'ordre des fichiers. Les blocs ci-dessous mis bout à bout donnent exactement `ofApp07.cpp`.
-
-### Le fichier `ofApp07.h`
-
-La table des matières du programme : les blocs qui existent et les variables partagées entre eux, avec leurs valeurs de départ.
-
-```cpp
-#pragma once
-#include "ofMain.h"
-
-// 07 - Traînée : mémoriser les positions précédentes
-// Sketch d'origine : Cours 3/sketch_05_First_special_fx
-// Notions : std::vector comme historique, push_back / erase(begin()),
-//           file de taille bornée, fonction de dessin réutilisée en boucle
-// Variante écartée : Cours 2022-2023/rendu03 (même principe, couvert par 07 + 08)
-
-class ofApp : public ofBaseApp {
-public:
-	void setup();
-	void update();
-	void draw();
-
-	void bear(float x, float y);
-
-	float x = 0;
-	float y = 0;
-	// Deux listes parallèles : xCoords[i] et yCoords[i] forment une position.
-	// (Étape suivante possible : un seul std::vector<glm::vec2>.)
-	std::vector<float> xCoords;
-	std::vector<float> yCoords;
-};
-```
-
-### En tête du fichier `ofApp07.cpp`
-
-L'inclusion du `.h`, qui rend visibles les variables partagées et les blocs déclarés.
-
-```cpp
-#include "ofApp07.h"
-```
-
-### Étape 1 — `bear()`
-
-Un ours dessiné autour du point (x, y).
-
-```cpp
-// Un ours dessiné autour du point (x, y)
-void ofApp::bear(float x, float y) {
-	ofDrawCircle(x - 25, y - 25, 25);
-	ofDrawCircle(x + 25, y - 25, 25);
-	ofDrawCircle(x, y, 50);
-	ofDrawCircle(x, y, 10);
-	ofDrawCircle(x - 30, y - 20, 10);
-	ofDrawCircle(x + 30, y - 20, 10);
-	ofDrawRectangle(x, y + 20, 50, 10);
-}
-```
-
-### Étape 2 — `setup()`
-
-Exécuté une fois au lancement : la fenêtre, les chargements, les valeurs de départ.
-
-```cpp
-void ofApp::setup() {
-	ofSetWindowShape(400, 400);
-}
-```
-
-### Étape 3 — `update()`
-
-Exécuté à chaque frame, avant le dessin : tout ce qui change.
-
-```cpp
-void ofApp::update() {
-	// Mémoriser la position courante AVANT de la mettre à jour
-	xCoords.push_back(x);
-	yCoords.push_back(y);
-
-	// Si la liste dépasse 50 éléments, retirer le plus ancien (le premier).
-	// Python : x_coords.pop(0)
-	// C++    : xCoords.erase(xCoords.begin())
-	if (xCoords.size() >= 50) {
-		xCoords.erase(xCoords.begin());
-		yCoords.erase(yCoords.begin());
-	}
-
-	// Nouvelle position = souris
-	x = mouseX;
-	y = mouseY;
-}
-```
-
-### Étape 4 — `draw()`
-
-Exécuté à chaque frame, après `update()` : uniquement du dessin.
-
-```cpp
-void ofApp::draw() {
-	ofBackground(0);
-	ofFill();
-	ofSetColor(255);
-
-	// Redessiner toutes les positions mémorisées, de la plus ancienne à la plus récente
-	for (int i = 0; i < xCoords.size(); i++) {
-		bear(xCoords[i], yCoords[i]);
-	}
-
-	// Puis la position courante
-	bear(x, y);
-}
-```
-
-### En fin de fichier
-
-Les notes et pistes laissées en commentaire dans le code.
-
-```cpp
-// ---------- Raisonnement d'origine (conservé du sketch) ----------
-// Dessiner un cercle suivi des 50 précédents :
-//   plutôt que 4 variables pour 2 positions précédentes,
-//   stocker toutes les x dans une liste et toutes les y dans une autre,
-//   puis dessiner les 50 cercles avec ces coordonnées.
-// Exercice : faire varier la couleur et la taille selon i (voir fichier 08).
-```
-
 ## Ce qu'il faut retenir
 
-- Une fonction range des instructions sous un nom : `void ofApp::nom(float a, float b) { ... }`, annoncée dans le `.h` par `void nom(float a, float b);`.
-- Les paramètres rendent la fonction réutilisable : le dessin est écrit par rapport à `(x, y)`.
-- `push_back` à la fin + `erase(begin())` au début = une file. Avec un `if` sur `size()`, sa taille reste bornée.
-- Deux listes parallèles forment des paires ; une `struct` peut les regrouper.
-- Mémoriser avant de mettre à jour.
+- Définir une fonction : `void ofApp::nom(float a, float b) { ... }` — et **l'annoncer** dans le `.h`.
+- Les paramètres sont des **copies** : la fonction ne peut pas abîmer les variables de l'appelant (passage par valeur).
+- Une **file** : `push_back` à la fin + `erase(begin())` au début, bornée par un `if` sur `size()`.
+- Mémoriser avant de mettre à jour — l'ordre des instructions dans `update()` compte.
+- Deux listes parallèles = une donnée par indice ; à modifier toujours ensemble (la `struct` les fusionne).

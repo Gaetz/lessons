@@ -75,13 +75,14 @@ Si la compilation échoue dès le départ, c'est presque toujours l'une de ces d
 
 ## 5. Utiliser les fichiers du cours
 
-Chaque leçon fournit une paire `ofAppNN.h` / `ofAppNN.cpp` :
+Au quotidien, tu travailles **toujours dans les mêmes fichiers** : `ofApp.h` et `ofApp.cpp`, dans le `src\` de ton projet. Chaque leçon te donne le code par étapes, à écrire dedans.
 
-1. Copie la paire dans le dossier `src\` de ton projet.
-2. Dans `main.cpp`, remplace l'include par `#include "ofAppNN.h"`.
-3. Les images éventuelles (`pandaroux.jpg`…) vont dans `bin\data\`.
+Chaque leçon fournit aussi une paire de référence `ofAppNN.h` / `ofAppNN.cpp` — l'état final, pour comparer ou repartir d'une base propre. Deux façons de l'utiliser :
 
-Un seul exemple est compilable à la fois dans un projet : chaque paire déclare la même classe `ofApp`.
+- recopier son **contenu** dans tes `ofApp.h` / `ofApp.cpp` (en gardant l'include `#include "ofApp.h"`) ;
+- ou copier la paire telle quelle dans `src\` et remplacer, dans `main.cpp`, l'include par `#include "ofAppNN.h"` — un seul exemple compilable à la fois : chaque paire déclare la même classe `ofApp`.
+
+Les images éventuelles (`pandaroux.jpg`…) vont dans `bin\data\`.
 
 ---
 

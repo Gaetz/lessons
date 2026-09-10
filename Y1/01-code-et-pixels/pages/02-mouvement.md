@@ -14,14 +14,20 @@ breadcrumb: 2 — Le mouvement / Cours 06
 
 # Cours 06 — Animation
 
-Deux formes qui rebondissent sur un fond qui change.
-Trois idées nouvelles : une **vitesse**, le **temps** entre
-deux frames, et la **condition** `if`.
+Deux formes qui traversent l'écran et rebondissent,
+sur un fond dont la couleur change en continu.
 
 <div class="mt-6 text-base">
 
-Bouger, c'est **ajouter une vitesse à une position**,
-60 fois par seconde.
+Trois idées nouvelles, une par étape :
+
+<v-clicks>
+
+- une **vitesse**
+- le **temps** entre deux frames
+- la **condition** `if`
+
+</v-clicks>
 
 </div>
 
@@ -33,7 +39,7 @@ Bouger, c'est **ajouter une vitesse à une position**,
 
 <!--
 Les petits pas s'additionnent parce que la position est persistante
-(cours 05). Vitesse positive : droite/bas. Négative : l'inverse.
+(cours 05).
 -->
 
 ---
@@ -41,116 +47,114 @@ layout: default
 breadcrumb: 2 — Le mouvement / Cours 06
 ---
 
-# Le `.h` — des vitesses en pixels par seconde
+# Étape 1 — une forme qui avance
 
 ```cpp
-class ofApp : public ofBaseApp {
-public:
-    void setup();  void update();  void draw();
+// ofApp.h :  float posX { 0 };   float posY { 0 };
+//            float vx { 60 };    float vy { 120 };    // pixels par seconde
 
-    float decalageX = 0;               // la position (persistante)
-    float decalageY = 0;
-    float vx = 60;                     // vitesses en PIXELS PAR SECONDE
-    float vy = 120;
-
-    float r = 0, g = 0, b = 0;         // le fond, et ses vitesses
-    float vr = 300, vg = 240, vb = 180;
-};
-```
-
-<div class="mt-3 text-sm">
-
-<v-clicks>
-
-- Position **et** vitesse : les deux doivent survivre d'une frame à l'autre → le `.h`
-- Les vitesses s'expriment **en unités par seconde** — la règle pour toute la suite
-- Même une couleur a des vitesses : `vr`, `vg`, `vb` feront osciller le fond
-
-</v-clicks>
-
-</div>
-
-<!--
-setup() du cours : juste ofSetWindowShape(400, 400).
--->
-
----
-layout: default
-breadcrumb: 2 — Le mouvement / Cours 06
----
-
-# Étape `update()` (1/2) — le delta time et le rebond
-
-```cpp
 void ofApp::update() {
-    float dt = ofGetLastFrameTime();   // durée de la frame précédente, en s
-
-    decalageX = decalageX + vx * dt;   // bouger = position + vitesse × dt
-    decalageY = decalageY + vy * dt;
-
-    if (decalageY > 180) vy = -vy;     // dépassé ? on inverse la vitesse
-    if (decalageY < -80) vy = -vy;
-    if (decalageX > 250) vx = -vx;
-    if (decalageX < 0)   vx = -vx;
-```
-
-<div class="mt-3 text-sm">
-
-<v-clicks>
-
-- Sans `dt` : deux fois plus lent à 30 fps qu'à 60 — **c'est le `player.x += speed` de la rentrée**, et cette fois vous écrivez la version juste
-- `if (condition) instruction;` — comparaisons `<`, `>`, `<=`, `>=`, `==` (**deux** signes !), `!=`
-- Rebondir = inverser la vitesse : `-vx` — 60 devient −60, la forme repart
-
-</v-clicks>
-
-</div>
-
-<!--
-Piège à écrire au tableau : if (x = 5) compile et ne fait pas ce qu'on croit.
-Plusieurs instructions sous un if : accolades.
--->
-
----
-layout: default
-breadcrumb: 2 — Le mouvement / Cours 06
----
-
-# Étape `update()` (2/2) et `draw()` — tout s'anime pareil
-
-```cpp
-    r = r + vr * dt;                   // la couleur fait des allers-retours
-    if (r >= 255) vr = -vr;
-    if (r <= 0)   vr = -vr;
-    // ... idem pour g et b, avec vg et vb
+	float dt = ofGetLastFrameTime();
+	posX = posX + vx * dt;
+	posY = posY + vy * dt;
 }
 
 void ofApp::draw() {
-    ofBackground(r, g, b);
-    ofSetColor(255);
-    ofFill();
-    ofDrawRectangle(decalageX + 100, decalageY + 100, 100, 100);
-    ofDrawEllipse(decalageX + 50, decalageY + 150, 200, 150);
+	ofBackground(30);
+	ofSetColor(255);
+	ofFill();
+	ofDrawRectangle(posX + 100, posY + 100, 100, 100);
+	ofDrawEllipse(posX + 50, posY + 150, 200, 150);
 }
 ```
 
-<div class="mt-3 text-sm">
+<div class="mt-2 text-base">
 
 <v-clicks>
 
-- Le **même rebond**, appliqué à une composante de couleur : un nombre qui bouge peut piloter n'importe quoi — position, taille, couleur, transparence
-- Trois vitesses différentes pour `r`, `g`, `b` : le fond ne se répète pas de sitôt
-- `ofDrawRectangle` part du **coin haut-gauche** ; `ofDrawEllipse` (deux diamètres) et `ofDrawCircle` du **centre**
+- **Bouger = ajouter une vitesse à une position**, à chaque frame — la persistance du cours 05 fait le reste
+- Les deux formes partagent `(posX, posY)` : elles bougent ensemble… puis sortent de l'écran — étape 3
 
 </v-clicks>
 
 </div>
 
+<!--
+ofDrawEllipse(x, y, largeur, hauteur) : centre + deux diamètres, alors que
+le rectangle part du coin haut-gauche. Essaie : double vx ; vy à 0 ;
+vitesses négatives.
+-->
+
+---
+layout: split
+breadcrumb: 2 — Le mouvement / Cours 06
+---
+
+# Étape 2 — le delta time
+
+```cpp
+float dt = ofGetLastFrameTime();
+posX = posX + vx * dt;
+```
+
+<div class="mt-4 text-base">
+
+<v-clicks>
+
+- `dt` : la **durée de la frame précédente**, en secondes (~0.0167 à 60 fps)
+- Le nombre de frames par seconde n'est **pas garanti** — `+ 1` par frame irait deux fois moins vite à 30 fps
+- La règle de l'année : **une vitesse s'exprime en unités par seconde et se multiplie par `dt`**
+
+</v-clicks>
+
+</div>
+
+::right::
+
+<div>
+<ZoomImage src="/ressources/cours/img/06-sans-deltatime.png" alt="Sans delta time, la machine à 30 fps parcourt moitié moins de chemin" class="w-full object-contain" />
+</div>
 
 <!--
-Exercices : rebonds sur les vrais bords (taille des formes !), le cercle qui
-réapparaît au lieu de rebondir, la taille qui pulse, et l'exercice 5 qui
-introduit cos(t) — le pont vers 08 et l'explication du fond du cours 00.
+C'est le player.x += speed de la rentrée — et cette fois on écrit la version
+juste. Essaie : afficher dt dans la console (cours 04).
+-->
+
+---
+layout: split
+breadcrumb: 2 — Le mouvement / Cours 06
+---
+
+# Étape 3 — la condition `if` : le rebond
+
+```cpp
+	if (posY > 180) vy = -vy;     // dépassé ? on inverse la vitesse
+	if (posY < -80) vy = -vy;
+	if (posX > 250) vx = -vx;
+	if (posX < 0)   vx = -vx;
+```
+
+<div class="mt-5 text-base">
+
+<v-clicks>
+
+- `if (condition) instruction;` — l'instruction ne s'exécute que si la condition est vraie
+- Rebondir = **inverser la vitesse** : `-vx` fait de 60 un −60, la forme repart
+- Plusieurs instructions sous un `if` ? Des **accolades**
+
+</v-clicks>
+
+</div>
+
+::right::
+
+<div>
+<ZoomImage src="/ressources/cours/img/06-rebond-vitesse.png" alt="Rebondir : +60 devient −60 au mur" class="w-full object-contain" />
+</div>
+
+<!--
+Essaie : rebondir sur les VRAIS bords (taille des formes !) ; puis un cercle
+qui réapparaît à gauche au lieu de rebondir — un seul if.
 -->
 
 ---
@@ -158,31 +162,132 @@ layout: default
 breadcrumb: 2 — Le mouvement / Cours 06
 ---
 
-# À vous — vitesses et rebonds
+# Les comparaisons — et le piège du `==`
 
-<div class="mt-6 text-base">
+```cpp
+if (x == 5)  { ... }     // égal : DEUX signes
+if (x = 5)   { ... }     // compile... et ne fait pas ce que tu crois
+```
+
+<div class="mt-5 text-base">
 
 <v-clicks>
 
-- **1 ·** Double `vx`. Puis mets `vy` à 0. Puis des vitesses **négatives** au départ
-- **2 ·** Fais rebondir sur les **vrais bords de la fenêtre** — il faudra tenir compte de la taille des formes
-- **3 ·** 🔥 Un cercle qui traverse l'écran et **réapparaît à gauche** au lieu de rebondir : un seul `if` suffit
+- Les comparaisons : `<`, `>`, `<=`, `>=`, `==` (égal), `!=` (différent)
+- Un seul `=` est l'affectation du cours 01 : « `x` reçoit 5 » — jamais une comparaison
+- `if (x = 5)` affecte, puis teste 5 (toujours vrai) : le bug silencieux classique
 
 </v-clicks>
+
+</div>
+
+<!--
+À écrire au tableau. Certains compilateurs préviennent — apprendre à lire
+leurs avertissements.
+-->
+
+---
+layout: split
+breadcrumb: 2 — Le mouvement / Cours 06
+---
+
+# Étape 4 — une couleur en allers-retours
+
+```cpp
+// .h : float r { 0 }, g { 0 }, b { 0 };
+//      float vr { 300 }, vg { 240 }, vb { 180 };
+
+	r = r + vr * dt;
+	if (r >= 255) vr = -vr;
+	if (r <= 0)   vr = -vr;
+	// ... idem g et b
+
+	ofBackground(r, g, b);
+```
+
+<div class="mt-3 text-base">
+
+<v-clicks>
+
+- **Exactement le rebond**, appliqué à une composante de couleur
+- Trois vitesses différentes : le fond ne se répète pas de sitôt
+- **Un nombre animé pilote n'importe quoi** : position, taille, couleur, transparence
+
+</v-clicks>
+
+</div>
+
+::right::
+
+<div>
+<img src="/ressources/cours/img/06-allers-retours.png" alt="Courbe en dents de scie entre 0 et 255" class="w-full object-contain" />
+</div>
+
+<!--
+Essaie : une variable taille qui fait des allers-retours entre 50 et 150 sur
+le rectangle.
+-->
+
+---
+layout: default
+breadcrumb: 2 — Le mouvement / Cours 06
+---
+
+# À vous (1/2)
+
+<div class="mt-3 text-base">
+
+**1 · Lire avant de lancer** — avec `posX { 0 }` et `vx { -100 }`, et ces deux conditions :
+
+```cpp
+if (posX > 300) vx = -vx;
+if (posX < 100) vx = -vx;
+```
+
+Dans quel sens la forme part-elle ? Que se passe-t-il au tout début ? Entre quelles bornes finit-elle par osciller ?
+
+</div>
+
+<div v-click class="mt-4 text-base">
+
+**2 · L'écran de veille** — un carré qui rebondit sur les quatre **vrais bords** de la fenêtre, et qui change de couleur **à chaque rebond** (une couleur aléatoire tirée dans le `if` — cours 03). Le mythe du logo DVD, à toi.
+
+</div>
+
+<!--
+Ex 1 : elle part vers la gauche (vx négatif), franchit 100 aussitôt (le if
+la renvoie), puis oscille entre 100 et 300.
+-->
+
+---
+layout: default
+breadcrumb: 2 — Le mouvement / Cours 06
+---
+
+# À vous (2/2)
+
+<div class="mt-4 text-base">
+
+**3 · La course** — deux cercles partent du bord gauche à des vitesses différentes ; quand l'un sort à droite, il réapparaît à gauche. Regarde-les se doubler : au bout de combien de temps se retrouvent-ils alignés ?
+
+</div>
+
+<div v-click class="mt-5 text-base">
+
+**4 ·** 🔥 **Le fond apaisé** — remplace les allers-retours du fond par une formule plus douce : `r = (cos(t * 1.5f) / 2 + 0.5f) * 255;` avec `float t = ofGetElapsedTimef();` (le temps écoulé depuis le lancement, en secondes). `cos` oscille entre −1 et 1 ; `/ 2 + 0.5` le ramène entre 0 et 1 ; `* 255` entre 0 et 255. Compare avec les dents de scie — on expliquera tout au cours 13.
 
 </div>
 
 <div v-click class="mt-6 text-sm op-75">
-<b>🔥</b> = exercice avancé · le reste des exercices est dans le document.
+<b>🔥</b> = exercice avancé.
 </div>
 
 <p class="ndp-credit">📄 <a href="/ressources/cours/pdf/06-animation.pdf" download>cours complet (PDF)</a> · <a href="/ressources/cours/06-animation.md" download>md</a> · <a href="/ressources/ofApp06.h" download>ofApp06.h</a> · <a href="/ressources/ofApp06.cpp" download>ofApp06.cpp</a></p>
 
 <!--
-N°2 : ofGetWidth() - taille. N°3 : if (x > ofGetWidth()) x = 0; — pas
-d'inversion de vitesse. Ex 4 et 5 du document pour les rapides.
+Ex 3 : ils s'alignent quand la différence de distances vaut un tour complet
+de fenêtre.
 -->
-
 ---
 layout: split
 breadcrumb: 2 — Le mouvement / Cours 07

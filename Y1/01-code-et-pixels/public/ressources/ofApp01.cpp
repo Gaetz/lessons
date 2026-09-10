@@ -7,14 +7,18 @@ void ofApp::setup() {
 	ofBackground(200);          // gris clair, comme le fond par défaut de Processing
 }
 
+void ofApp::update() {
+
+}
+
 // Processing dessine ce sketch une seule fois (pas de draw()).
 // openFrameworks appelle draw() 60 fois par seconde : un dessin statique
 // est simplement redessiné à l'identique à chaque frame.
 void ofApp::draw() {
 	// Deux variables pour stocker la taille de l'écran.
 	// En C++ chaque variable a un type : int pour un entier, float pour un décimal.
-	int sizeX = 400;
-	int sizeY = 400;
+	int sizeX { 400 };
+	int sizeY { 400 };
 
 	// Coordonnée horizontale du milieu de l'écran
 	float x = sizeX / 2.0f;
@@ -34,7 +38,7 @@ void ofApp::draw() {
 	// Dessiner 10 cercles de gauche à droite, au premier quart de l'écran.
 	// Version "à la main", sans boucle : on répète le même code 10 fois.
 	x = 0;
-	float step = 75;
+	float step { 75 };
 	y = sizeY * 1 / 4.0f;
 	ofDrawCircle(x, y, 37.5f);
 	x = x + step;

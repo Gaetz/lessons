@@ -1,60 +1,75 @@
-# Cours 11 — Filtres : une formule appliquée à chaque pixel
+# Cours 11 — Filtres : transformer chaque pixel
 
-> **Fichiers** : `ofApp11.h` + `ofApp11.cpp`, image `data/pandaroux.jpg`
 > **Avant** : cours 10 (lire un pixel), cours 09 (HSB).
+> **Comment travailler** : toujours dans `ofApp.h` et `ofApp.cpp`, par versions successives. `ofApp11.h` / `ofApp11.cpp` : la référence téléchargeable de l'état final. `pandaroux.jpg` va dans `bin/data`.
 
-Un filtre d'image, c'est une règle du genre « pour chaque pixel, remplace sa couleur par f(couleur) ». Dix règles différentes, et une même boucle qui les applique. Touches 0 à 9 pour changer d'effet, souris pour régler le paramètre.
+Un filtre, c'est une règle : « pour chaque pixel, remplace sa couleur par f(couleur) ». Dix règles différentes, **une même machine** qui les applique. Touches 0 à 9 pour choisir l'effet, souris pour son paramètre. C'est le cours le plus important du module : sa double boucle reviendra dans tous les suivants.
 
-![Huit versions de la même photo : original, négatif, gris, contraste, seuil, postérisation, teinte tournée, color splash](img/11-filtres.png)
+![Huit filtres appliqués à la même photo](img/11-filtres.png)
 
-## 1. Deux images : la source et le résultat
+## 1. Étape 1 — deux images, jamais une
+
+Dans `ofApp.h` :
 
 ```cpp
-// dans le .h
-ofImage source;
-ofImage resultat;
+	ofImage source;
+	ofImage resultat;
+	int   effet { 0 };
+	float parametre { 0.5f };
 ```
 
-```cpp
-// dans setup()
-source.load("pandaroux.jpg");
-resultat.allocate(source.getWidth(), source.getHeight(), OF_IMAGE_COLOR);
-```
-
-On ne modifie **jamais** la source. On lit dedans, on écrit dans `resultat`. Sinon, changer d'effet partirait d'une image déjà transformée, et appliquer deux fois le négatif ne redonnerait pas l'original. `allocate` réserve une image vide de la bonne taille, en couleur.
-
-## 2. La double boucle : visiter tous les pixels
+Dans `setup()` :
 
 ```cpp
-for (int y = 0; y < source.getHeight(); y++) {
-	for (int x = 0; x < source.getWidth(); x++) {
-		ofColor c = source.getColor(x, y);
-		resultat.setColor(x, y, filtre(c, parametre));
+	ofSetWindowShape(774, 516);
+	if (!source.load("pandaroux.jpg")) {
+		ofLogError() << "pandaroux.jpg introuvable dans bin/data";
 	}
-}
-resultat.update();
+	resultat.allocate(source.getWidth(), source.getHeight(), OF_IMAGE_COLOR);
 ```
 
-Une boucle dans une boucle. La boucle extérieure parcourt les lignes, `y` de 0 à la hauteur. Pour **chaque** ligne, la boucle intérieure parcourt les colonnes, `x` de 0 à la largeur. Le corps intérieur s'exécute donc `largeur × hauteur` fois : 400 000 fois pour cette image. C'est le motif fondamental de tout le traitement d'image, et il reviendra dans chaque cours jusqu'à la fin.
+On lit dans la **source**, on écrira dans le **résultat** — on ne modifie jamais la source. Sinon, changer d'effet partirait d'une image déjà transformée, et deux négatifs ne redonneraient pas l'original. `allocate` réserve une image vide de la bonne taille, en couleur.
 
-À chaque pixel : lire dans la source, transformer, écrire dans le résultat avec `setColor(x, y, couleur)`. Après la boucle, `resultat.update()` envoie les nouveaux pixels à la carte graphique. Sans lui, `draw()` continue d'afficher l'ancienne version.
+> **Essaie** : affiche `source.getWidth()` et `getHeight()` dans la console — combien de pixels au total ?
 
-Tout ceci est dans `update()`, pas dans `draw()`. `draw()` se contente de `resultat.draw(0, 0)`.
+## 2. Étape 2 — la machine : une boucle dans une boucle
 
-## 3. Une fonction qui renvoie une valeur
+Le cœur du cours. Dans `update()`, puis `resultat.draw(0, 0);` dans `draw()` (avec `ofSetColor(255)` avant) :
 
 ```cpp
-ofColor ofApp::filtre(ofColor c, float p) {
-	...
-	return ofColor(255 - r, 255 - g, 255 - b);
+void ofApp::update() {
+	parametre = mouseX / (float)ofGetWidth();      // 0 à gauche, 1 à droite
+
+	for (int y = 0; y < source.getHeight(); y++) {      // chaque ligne...
+		for (int x = 0; x < source.getWidth(); x++) {   // ...chaque colonne
+			ofColor c = source.getColor(x, y);
+			resultat.setColor(x, y, filtre(c, parametre));
+		}
+	}
+	resultat.update();     // envoyer les nouveaux pixels à la carte graphique
 }
 ```
 
-Jusqu'ici nos fonctions étaient `void` : elles faisaient quelque chose sans rien rendre. Celle-ci commence par `ofColor` : elle **renvoie** une couleur. Le mot `return` donne la valeur renvoyée et termine la fonction immédiatement. Celui qui appelle récupère cette valeur là où il a écrit `filtre(c, parametre)`, comme `ofRandom` ou `getColor` renvoient un résultat.
+Et pour que ça compile, donne à la machine une recette **provisoire** — le filtre qui ne fait rien :
 
-Une fonction qui reçoit un pixel et en renvoie un autre, c'est exactement la définition d'un filtre par pixel.
+```cpp
+// dans le .h :  ofColor filtre(ofColor c, float p);
+ofColor ofApp::filtre(ofColor c, float p) {
+	return c;
+}
+```
 
-## 4. Le piège du débordement
+L'image s'affiche, identique — mais chaque pixel est **passé dans ta fonction**. Ce qui est nouveau :
+
+- Une boucle **dans** une boucle : pour chaque ligne `y`, on parcourt chaque colonne `x`. Le corps tourne `largeur × hauteur` fois — 774 × 516 = 399 384 fois **par frame**. C'est LE motif de tout le reste du module.
+- `resultat.setColor(x, y, ...)` écrit un pixel en mémoire ; `resultat.update()` envoie la nouvelle image à la carte graphique — sans lui, `draw()` affiche l'ancienne version.
+- `mouseX / (float)ofGetWidth()` : le `(float)` **convertit** la largeur en nombre à virgule, pour éviter la division entière du cours 01.
+
+> **Essaie** : dans `filtre`, remplace `return c;` par `return ofColor(255, 0, 0);` — l'image entière devient rouge. La preuve que la machine visite bien **chaque** pixel.
+
+## 3. Étape 3 — l'octet, la petite case qui reboucle
+
+Avant d'écrire de vraies recettes, un détour indispensable par la mémoire (cours 01).
 
 ```cpp
 float r = c.r;
@@ -86,23 +101,49 @@ float k = (p - 0.5f) * 256;
 return ofColor(ofClamp(r + k, 0, 255), ofClamp(g + k, 0, 255), ofClamp(b + k, 0, 255));
 ```
 
-## 5. Choisir l'effet : `switch` et le clavier
+> **Essaie** : vérifie le rebouclage dans la console — `unsigned char uc = 250; uc = uc + 10; std::cout << (int)uc << std::endl;` (le `(int)` force l'affichage en nombre plutôt qu'en caractère).
+
+## 4. Étape 4 — les premières recettes : `switch` et `return`
+
+Remplace le corps de `filtre()` :
 
 ```cpp
-switch (effet) {
-case 1:
-	return ofColor(255 - r, 255 - g, 255 - b);
-case 2: {
-	float gris = (r + g + b) / 3;
-	return ofColor(gris, gris, gris);
-}
-...
-default:
-	return c;
+ofColor ofApp::filtre(ofColor c, float p) {
+	float r = c.r;                       // copier en float AVANT de calculer
+	float g = c.g;
+	float b = c.b;
+	float luminance = 0.299f * r + 0.587f * g + 0.114f * b;
+
+	switch (effet) {
+
+	case 1:                              // négatif : chaque canal retourné
+		return ofColor(255 - r, 255 - g, 255 - b);
+
+	case 2: {                            // gris : les trois canaux égaux
+		float gris = (r + g + b) / 3;
+		return ofColor(gris, gris, gris);
+	}
+
+	case 3:                              // un seul nombre = un gris
+		return ofColor(luminance);
+
+	default:
+		return c;                        // 0 : image d'origine
+	}
 }
 ```
 
-`switch (variable)` compare la variable à chaque `case` et saute au bon. C'est un `if` à plusieurs branches, plus lisible que dix `if` à la suite. `default` est la branche « aucun des cas ». Quand un `case` déclare une variable, il faut des accolades autour de son bloc. Ici chaque branche se termine par `return`, ce qui sort de la fonction ; sinon on écrirait `break;` pour sortir du `switch`.
+Trois nouveautés de langage :
+
+- La fonction commence par `ofColor`, pas `void` : elle **renvoie** une valeur. `return` donne le résultat et termine la fonction — un pixel entre, un pixel sort. C'est la définition même d'un filtre. (Et souviens-toi du cours 07 : `c` est une **copie**, la source est intouchable.)
+- `switch (variable)` compare la variable à chaque `case` et saute au bon — un `if` à plusieurs branches, plus lisible que dix `if`. `default` est la branche « aucun des cas ». Un `case` qui déclare une variable prend des accolades.
+- Deux gris différents : la **moyenne**, et la **luminance** — l'œil est plus sensible au vert, un vert pur paraît plus clair qu'un bleu pur. Les coefficients 0.299 / 0.587 / 0.114 viennent de là.
+
+> **Essaie** : ajoute un `case` à toi — l'échange de canaux `return ofColor(g, b, r);`, puis un canal isolé `return ofColor(r, 0, 0);`.
+
+## 5. Étape 5 — le clavier
+
+Pour choisir l'effet en direct, un nouveau bloc, à annoncer dans le `.h` (`void keyPressed(int key);`) :
 
 ```cpp
 void ofApp::keyPressed(int key) {
@@ -112,270 +153,87 @@ void ofApp::keyPressed(int key) {
 }
 ```
 
-`keyPressed` est un bloc appelé automatiquement à chaque touche pressée. `key` est le **code** du caractère : `'0'` vaut 48, `'1'` 49, etc. `key - '0'` transforme le code en chiffre. Le `&&` se lit « et » : les deux conditions doivent être vraies.
+`keyPressed` est appelé automatiquement à chaque touche pressée — comme `update` et `draw`, c'est openFrameworks qui l'appelle. `key` est le **code** du caractère : `'0'` vaut 48, `'1'` 49… d'où la soustraction `key - '0'` qui transforme le code en chiffre. Le `&&` se lit « et » : les deux conditions doivent être vraies.
 
-## 6. Les formules
+> **Essaie** : affiche l'effet courant dans la fenêtre avec `ofDrawBitmapString`, pour savoir où tu en es.
 
-![Courbes de transfert : entrée de 0 à 255 en abscisse, sortie en ordonnée](img/11-courbes.png)
+## 6. Étape 6 — les formules paramétrées
 
-Chaque filtre est une petite formule. La courbe ci-dessus montre, pour chaque valeur d'entrée, la valeur de sortie.
-
-| Effet | Formule | Ce qui se passe |
-|---|---|---|
-| Négatif | `255 - c` | chaque canal est retourné |
-| Gris moyenne | `(r + g + b) / 3` | les trois canaux reçoivent la même valeur |
-| Gris luminance | `0.299 r + 0.587 g + 0.114 b` | l'œil est plus sensible au vert : un vert pur paraît plus clair qu'un bleu pur |
-| Luminosité | `c + k` | tout monte ou descend d'un même cran |
-| Contraste | `(c - 128) * k + 128` | on écarte (`k > 1`) ou rapproche (`k < 1`) du gris moyen |
-| Seuil | `c < s ? 0 : 255` | noir ou blanc, rien entre |
-| Postérisation | `floor(c / pas) * pas` | arrondi à un multiple : moins de niveaux, des aplats |
-
-La postérisation utilise la **division entière** du cours 01, cette fois volontairement : `floor(137 / 32) * 32` vaut 128. Le seuil utilise la luminance comme critère.
-
-## 7. Deuxième partie : passer par HSB
+Les recettes suivantes utilisent `p`, le paramètre piloté par la souris (0 à 1) :
 
 ```cpp
-case 8: {
-	float teinte = fmod(c.getHue() + p * 255, 255);
-	return ofColor::fromHsb(teinte, c.getSaturation(), c.getBrightness());
-}
-```
-
-Décaler toutes les couleurs sur la roue : lire la teinte, l'augmenter, faire boucler avec `fmod`, reconstruire. Une ligne en HSB, et pratiquement impossible à écrire en RGB. C'est pour ce genre de filtre qu'on a fait le cours 09.
-
-```cpp
-case 9: {
-	float cible = p * 255;
-	float ecart = fabs(c.getHue() - cible);
-	if (ecart > 127) ecart = 255 - ecart;
-	if (ecart < 20) return c;
-	return ofColor(luminance);
-}
-```
-
-Le **color splash** : on garde la couleur seulement autour d'une teinte cible, tout le reste passe en gris. `fabs` est la valeur absolue pour les `float`. Le `if (ecart > 127)` gère le fait que la roue est circulaire : les teintes 250 et 5 sont voisines. `ofColor(luminance)` avec un seul nombre fabrique un gris.
-
-## Exercices
-
-1. Sépia : `r' = 0.393 r + 0.769 g + 0.189 b`, `g' = 0.349 r + 0.686 g + 0.168 b`, `b' = 0.272 r + 0.534 g + 0.131 b`. Chaque canal de sortie mélange les trois canaux d'entrée.
-2. Échange de canaux : `ofColor(g, b, r)`. Puis isoler un canal : `ofColor(r, 0, 0)`.
-3. Affiche la teinte seule en niveaux de gris : `ofColor(c.getHue())`. Puis la saturation, puis la luminosité. Tu **vois** les trois axes du cours 09.
-4. Gamma : `255 * pow(r / 255, k)` sur chaque canal, avec `k` de 0.3 à 3 selon la souris.
-5. Chromakey : si la teinte est proche du vert, remplace le pixel par celui d'une deuxième image.
-
-## Le code complet, pas à pas
-
-Le programme entier, dans l'ordre des fichiers. Les blocs ci-dessous mis bout à bout donnent exactement `ofApp11.cpp`.
-
-### Le fichier `ofApp11.h`
-
-La table des matières du programme : les blocs qui existent et les variables partagées entre eux, avec leurs valeurs de départ.
-
-```cpp
-#pragma once
-#include "ofMain.h"
-
-// 11 - Filtres : une formule appliquée à chaque pixel
-// Nouveau : pas de sketch Processing d'origine
-// Notions : double boucle sur tous les pixels (lignes / colonnes), image source et image résultat,
-//           setColor + update(), débordement des unsigned char (calcul en float puis ofClamp),
-//           paramètre à la souris, choix de l'effet au clavier (keyPressed, switch),
-//           deuxième partie : les filtres qui passent par HSB (relit 09)
-// Ressource : bin/data/pandaroux.jpg (774 x 516)
-
-class ofApp : public ofBaseApp {
-public:
-	void setup();
-	void update();
-	void draw();
-	void keyPressed(int key);
-
-	// Un pixel entre, un pixel sort. p est le paramètre (0 à 1) piloté par la souris.
-	ofColor filtre(ofColor c, float p);
-
-	ofImage source;
-	ofImage resultat;
-	int   effet = 0;
-	float parametre = 0.5f;
-	std::vector<std::string> noms = {
-		"original", "negatif", "gris (moyenne)", "gris (luminance)", "luminosite",
-		"contraste", "seuil", "posterisation", "rotation de teinte", "color splash"
-	};
-};
-```
-
-### En tête du fichier `ofApp11.cpp`
-
-L'inclusion du `.h`, qui rend visibles les variables partagées et les blocs déclarés.
-
-```cpp
-#include "ofApp11.h"
-```
-
-### Étape 1 — `setup()`
-
-Exécuté une fois au lancement : la fenêtre, les chargements, les valeurs de départ.
-
-```cpp
-void ofApp::setup() {
-	ofSetWindowShape(774, 516);
-	if (!source.load("pandaroux.jpg")) {
-		ofLogError() << "pandaroux.jpg introuvable dans bin/data";
-	}
-	// Deux images : on lit dans la source, on écrit dans le résultat.
-	// On ne modifie jamais la source : sinon changer d'effet partirait d'une image déjà transformée.
-	// allocate réserve une image vide de la même taille, en couleur (3 canaux).
-	resultat.allocate(source.getWidth(), source.getHeight(), OF_IMAGE_COLOR);
-}
-```
-
-### Étape 2 — `filtre()`
-
-Fonction `filtre()`.
-
-```cpp
-ofColor ofApp::filtre(ofColor c, float p) {
-	// Les composantes d'un ofColor sont des unsigned char : entiers de 0 à 255, et 250 + 10
-	// ne donne pas 260 mais 4 (ça reboucle). On copie donc dans des float, on calcule,
-	// et on borne avec ofClamp avant de reconstruire la couleur.
-	float r = c.r;
-	float g = c.g;
-	float b = c.b;
-
-	// Luminance : gris "perçu". L'oeil est bien plus sensible au vert qu'au bleu,
-	// donc un vert pur paraît plus clair qu'un bleu pur de même intensité.
-	float luminance = 0.299f * r + 0.587f * g + 0.114f * b;
-
-	switch (effet) {
-
-	case 1: // Négatif : chaque canal est retourné
-		return ofColor(255 - r, 255 - g, 255 - b);
-
-	case 2: { // Gris par moyenne : les trois canaux reçoivent la même valeur
-		float gris = (r + g + b) / 3;
-		return ofColor(gris, gris, gris);
-	}
-
-	case 3: // Gris par luminance (un seul argument à ofColor = gris)
-		return ofColor(luminance);
-
-	case 4: { // Luminosité : on ajoute la même valeur partout, de -128 à +128 selon la souris
+	case 4: {                            // luminosité : tout monte ou descend
 		float k = (p - 0.5f) * 256;
-		return ofColor(ofClamp(r + k, 0, 255), ofClamp(g + k, 0, 255), ofClamp(b + k, 0, 255));
+		return ofColor(ofClamp(r + k, 0, 255), ofClamp(g + k, 0, 255),
+		               ofClamp(b + k, 0, 255));
 	}
-
-	case 5: { // Contraste : on écarte (k > 1) ou on rapproche (k < 1) chaque valeur du milieu 128
+	case 5: {                            // contraste : écarter du gris moyen
 		float k = p * 3;
 		return ofColor(ofClamp((r - 128) * k + 128, 0, 255),
 		               ofClamp((g - 128) * k + 128, 0, 255),
 		               ofClamp((b - 128) * k + 128, 0, 255));
 	}
-
-	case 6: // Seuil : noir ou blanc, rien entre les deux. Le seuil suit la souris.
+	case 6:                              // seuil : noir ou blanc, rien entre
 		if (luminance < p * 255) return ofColor(0);
 		else                     return ofColor(255);
 
-	case 7: { // Postérisation : on arrondit chaque canal à un multiple de "pas".
-		// Division entière (cours 01) : floor(137 / 32) * 32 = 128. Moins de niveaux = aplats.
-		float pas = 8 + p * 120;              // 8 à 128
+	case 7: {                            // postérisation : arrondir à un multiple
+		float pas = 8 + p * 120;
 		return ofColor(floor(r / pas) * pas, floor(g / pas) * pas, floor(b / pas) * pas);
 	}
+```
 
-	// ---- Deuxième partie : passer par HSB (cours 09) ----
-	// Ces deux effets sont une ligne en HSB et une horreur en RGB.
+![Courbes de transfert : entrée de 0 à 255 en abscisse, sortie en ordonnée](img/11-courbes.png)
 
-	case 8: { // Rotation de teinte : on décale la teinte, saturation et luminosité inchangées
+Chaque filtre est une petite formule ; les courbes ci-dessus montrent, pour chaque valeur d'entrée, la valeur de sortie :
+
+| Effet | Formule | Ce qui se passe |
+|---|---|---|
+| Luminosité | `c + k` | tout monte ou descend d'un même cran |
+| Contraste | `(c - 128) * k + 128` | on écarte (`k > 1`) ou rapproche (`k < 1`) du gris moyen |
+| Seuil | noir si `luminance < s`, blanc sinon | deux valeurs, rien entre |
+| Postérisation | `floor(c / pas) * pas` | arrondi à un multiple : moins de niveaux, des aplats |
+
+La postérisation utilise la **division entière** du cours 01 — cette fois volontairement. Et partout, la règle de l'étape 3 : calcul en `float`, `ofClamp`, reconstruction.
+
+> **Essaie** : invente ta courbe — par exemple le négatif du rouge seul : `return ofColor(255 - r, g, b);`. Décris son effet avant de lancer.
+
+## 7. Étape 7 — les filtres qui passent par HSB
+
+```cpp
+	case 8: {   // rotation de teinte : tout se décale sur la roue
 		float teinte = fmod(c.getHue() + p * 255, 255);
 		return ofColor::fromHsb(teinte, c.getSaturation(), c.getBrightness());
 	}
-
-	case 9: { // Color splash : couleur conservée seulement autour d'une teinte cible, gris ailleurs
+	case 9: {   // color splash : couleur gardée autour d'une teinte cible
 		float cible = p * 255;
 		float ecart = fabs(c.getHue() - cible);
-		if (ecart > 127) ecart = 255 - ecart;   // la roue est circulaire : 250 et 5 sont voisins
+		if (ecart > 127) ecart = 255 - ecart;   // la roue est circulaire !
 		if (ecart < 20) return c;
 		return ofColor(luminance);
 	}
-
-	default: // 0 : image d'origine
-		return c;
-	}
-}
 ```
 
-### Étape 3 — `update()`
+- La **rotation de teinte** : lire la teinte, l'augmenter, boucler avec `fmod`, reconstruire. Une ligne en HSB — pratiquement impossible à écrire en RGB. C'est pour ce genre de filtre qu'on a fait le cours 09.
+- Le **color splash** : la couleur n'est gardée qu'autour d'une teinte cible, tout le reste passe en gris. `fabs` est la valeur absolue des `float`, et le `if (ecart > 127)` gère la roue circulaire — les teintes 250 et 5 sont voisines.
 
-Exécuté à chaque frame, avant le dessin : tout ce qui change.
+> **Essaie** : affiche la teinte seule en niveaux de gris — `return ofColor(c.getHue());`. Puis la saturation, puis la luminosité. Tu **vois** les trois axes du cours 09 sur une vraie photo.
 
-```cpp
-void ofApp::update() {
-	parametre = mouseX / (float)ofGetWidth();   // 0 à gauche, 1 à droite
+## Exercices
 
-	// Pour chaque ligne y, pour chaque colonne x : lire, transformer, écrire.
-	// Cette double boucle revient en 12, sur une grille de 20 pixels au lieu de chaque pixel.
-	for (int y = 0; y < source.getHeight(); y++) {
-		for (int x = 0; x < source.getWidth(); x++) {
-			ofColor c = source.getColor(x, y);
-			resultat.setColor(x, y, filtre(c, parametre));
-		}
-	}
-	// setColor modifie les pixels en mémoire ; update() envoie la nouvelle image à la carte graphique.
-	resultat.update();
+1. **Lire avant de lancer** — que fait le filtre `return ofColor(ofClamp((r - 128) * 8 + 128, 0, 255), ...)` (même formule sur les trois canaux) ? Décris l'image obtenue, puis vérifie avec le contraste poussé à fond.
 
-	// 774 x 516 = 400 000 pixels par frame : ça passe pour ces filtres.
-	// Si ça rame : ne recalculer que quand la souris ou l'effet a changé (voir 17),
-	// ou lire le tableau de pixels directement au lieu de getColor / setColor.
-}
-```
+2. **Le sépia** — chaque canal de **sortie** mélange les trois canaux d'**entrée** : `r' = 0.393 r + 0.769 g + 0.189 b`, `g' = 0.349 r + 0.686 g + 0.168 b`, `b' = 0.272 r + 0.534 g + 0.131 b`. Ajoute-le comme effet. (Retiens sa forme — neuf coefficients — elle a un nom qu'on découvrira dans le bloc couleur avancée : une matrice.)
 
-### Étape 4 — `draw()`
+3. **Le gamma** — `255 * pow(r / 255.0f, k)` sur chaque canal, avec `k` allant de 0.3 à 3 selon la souris. Compare avec la luminosité (case 4) : lequel des deux préserve les noirs ?
 
-Exécuté à chaque frame, après `update()` : uniquement du dessin.
-
-```cpp
-void ofApp::draw() {
-	ofSetColor(255);
-	resultat.draw(0, 0);
-
-	ofSetColor(255, 200, 0);
-	ofDrawBitmapString("Effet " + ofToString(effet) + " : " + noms[effet]
-	                   + "   parametre = " + ofToString(parametre, 2), 10, 20);
-	ofDrawBitmapString("Touches 0 a 9 : changer d'effet.  Souris : parametre.", 10, 40);
-}
-```
-
-### Étape 5 — `keyPressed()`
-
-Appelé automatiquement à chaque touche pressée.
-
-```cpp
-void ofApp::keyPressed(int key) {
-	// key est le code du caractère : '0' vaut 48, '1' vaut 49... d'où la soustraction.
-	if (key >= '0' && key <= '9') {
-		effet = key - '0';
-	}
-}
-```
-
-### En fin de fichier
-
-Les notes et pistes laissées en commentaire dans le code.
-
-```cpp
-// Exercices :
-// - sépia : chaque canal de sortie mélange les trois canaux d'entrée
-//     r' = 0.393 r + 0.769 g + 0.189 b, g' = 0.349 r + 0.686 g + 0.168 b, b' = 0.272 r + 0.534 g + 0.131 b
-// - échange de canaux : ofColor(g, b, r). Isoler un canal : ofColor(r, 0, 0)
-// - afficher la teinte, la saturation ou la luminosité seule, en niveaux de gris
-// - gamma : 255 * pow(r / 255, k), même chose pour g et b
-// - chromakey : si la teinte est proche du vert, remplacer le pixel par une autre image
-```
+4. **Le chromakey** *(plus costaud)* — charge une deuxième image de même taille ; si la teinte du pixel est proche du vert, renvoie le pixel de l'autre image à la place. Le fond vert du cinéma, en une dizaine de lignes.
 
 ## Ce qu'il faut retenir
 
-- Un filtre par pixel = une fonction `ofColor f(ofColor c)` appliquée à chaque pixel par une double boucle `for y { for x { } }`.
-- Lire dans `source`, écrire dans `resultat` avec `setColor`, puis `resultat.update()`.
-- Les composantes de couleur ne dépassent pas 255 et rebouclent : calculer en `float`, borner avec `ofClamp`.
-- `return` renvoie une valeur et termine la fonction.
-- `switch (v) { case 1: ... default: ... }` choisit une branche ; `keyPressed(int key)` reçoit le code de la touche, `key - '0'` donne le chiffre.
-- Certains filtres sont triviaux en HSB et infaisables en RGB : rotation de teinte, color splash.
+- Deux images : lire la **source**, écrire le **résultat** — jamais l'inverse, jamais une seule.
+- La machine : double boucle `for (y) for (x)` sur tous les pixels + `setColor` + `resultat.update()`. Elle revient dans **tous** les cours suivants.
+- Les composantes d'`ofColor` sont des **octets** (0-255, reboucle au-delà) : copier en `float`, calculer, `ofClamp`, reconstruire.
+- Une fonction peut **renvoyer** une valeur : type de retour à la place de `void`, `return` pour livrer le résultat.
+- `switch` / `case` / `default` : un aiguillage lisible ; `keyPressed(int key)` : le clavier, avec `key - '0'`.
+- Les filtres HSB (rotation de teinte, color splash) : la récompense du cours 09.

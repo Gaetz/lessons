@@ -1,23 +1,19 @@
 # Cours 09 — Couleur : RGB, HSB, dégradés
 
-> **Fichiers** : `ofApp09.h` + `ofApp09.cpp`
 > **Avant** : cours 08 (couleur animée par cosinus, traînée).
+> **Comment travailler** : toujours dans `ofApp.h` et `ofApp.cpp`, par versions successives. `ofApp09.h` / `ofApp09.cpp` : la référence téléchargeable de l'état final.
 
-Depuis le cours 00, une couleur est trois nombres : rouge, vert, bleu. C'est ainsi que l'écran travaille, mais pas ainsi que nous **pensons** la couleur. Ce cours introduit une deuxième manière de la décrire, la teinte, et un type pour la manipuler comme une valeur : `ofColor`.
+Depuis le cours 00, une couleur est trois nombres : rouge, vert, bleu. C'est ainsi que l'**écran** travaille — pas ainsi que **nous** pensons la couleur. Ce cours introduit une deuxième manière de la décrire, la teinte, et un type pour la manipuler comme une valeur : `ofColor`.
 
 ![Trois bandes teinte, saturation, luminosité ; deux cercles ; un dégradé ; une traînée arc-en-ciel](img/09-hsb.png)
 
-## 1. RGB : un cube
+## 1. Deux façons de décrire une couleur
+
+**RGB : un cube.** Une couleur RGB est un point dans un cube — trois axes, rouge, vert, bleu, chacun de 0 à 255. Le noir à l'origine, le blanc au sommet opposé. Pratique pour l'écran, pénible pour l'humain : « la même couleur, un peu plus claire » ou « la couleur suivante de l'arc-en-ciel » ne se calculent pas simplement dans ce cube. C'est pour ça que le cours 08 bricolait trois cosinus.
 
 ![Cube RGB avec ses huit sommets colorés](img/09-cube-rgb.png)
 
-Une couleur RGB, c'est un point dans un cube : trois axes, rouge, vert, bleu, chacun de 0 à 255. Le noir est à l'origine, le blanc au sommet opposé, les couleurs pures sur les arêtes. Pratique pour l'écran, pénible pour l'humain : « la même couleur mais un peu plus claire » ou « la couleur suivante dans l'arc-en-ciel » ne se calculent pas simplement dans ce cube. C'est pour ça que le cours 08 bricolait trois cosinus.
-
-## 2. HSB : une roue
-
-![Roue des teintes, de 0 à 255 en tournant](img/09-roue.png)
-
-HSB décrit une couleur comme on la nomme :
+**HSB : une roue.** HSB décrit une couleur comme on la **nomme** :
 
 | Axe | Nom | 0 | 255 |
 |---|---|---|---|
@@ -25,238 +21,113 @@ HSB décrit une couleur comme on la nomme :
 | S | **saturation** | gris | couleur pure |
 | B | **luminosité** (brightness) | noir | couleur pleine |
 
-La teinte est une **position sur une roue** : après 255 on revient à 0. « La couleur suivante dans l'arc-en-ciel » devient « teinte + 1 ». « Plus clair » devient « luminosité + 1 ».
+![Roue des teintes, de 0 à 255 en tournant](img/09-roue.png)
 
-Attention : en openFrameworks les trois axes vont de **0 à 255**, comme r, g, b. Dans d'autres logiciels la teinte est en degrés de 0 à 360. Ici, non.
+La teinte est une **position sur une roue** : après 255, on revient à 0. « La couleur suivante » devient « teinte + 1 » ; « plus clair » devient « luminosité + 1 ». Attention : en openFrameworks les trois axes vont de **0 à 255** (pas de degrés).
 
-## 3. `ofColor` : la couleur comme valeur
+## 2. Étape 1 — voir les trois axes
 
-```cpp
-ofColor depart(255, 80, 0);
-ofSetColor(depart);
-```
-
-`ofColor` est un type qui contient une couleur entière. C'est une `struct` (cours 07) : elle regroupe quatre variables, `r`, `g`, `b`, `a`, accessibles avec un point : `depart.r` vaut 255. On peut la ranger dans une variable, la passer à `ofSetColor`, la transformer.
-
-Pour fabriquer une couleur à partir de HSB :
+Fenêtre 800 × 600, et dans `draw()` :
 
 ```cpp
-ofSetColor(ofColor::fromHsb(teinte, 255, 255));
-```
-
-`ofColor::fromHsb(h, s, b)` construit une `ofColor`. Le `::` se lit « de la famille `ofColor` » : c'est un outil rangé avec le type. Dans l'autre sens, `c.getHue()`, `c.getSaturation()` et `c.getBrightness()` lisent les trois axes HSB d'une couleur existante.
-
-## 4. Trois bandes pour voir les axes
-
-```cpp
-for (int x = 0; x < largeur; x++) {
-	float p = x / largeur * 255;      // 0 à gauche, 255 à droite
-	ofSetColor(ofColor::fromHsb(p, 255, 255));
-	ofDrawLine(x, 20, x, 60);
-	ofSetColor(ofColor::fromHsb(teinteChoisie, p, 255));
-	ofDrawLine(x, 80, x, 120);
-	ofSetColor(ofColor::fromHsb(teinteChoisie, 255, p));
-	ofDrawLine(x, 140, x, 180);
-}
-```
-
-Une ligne verticale par pixel de large, et à chaque pixel on fait varier **un seul** des trois axes. La première bande parcourt toute la roue. Les deux autres montrent la saturation et la luminosité pour la teinte choisie par la souris. `ofDrawLine(x1, y1, x2, y2)` trace un trait entre deux points.
-
-## 5. Animer une teinte
-
-```cpp
-float teinte = fmod(t * 40, 255);
-ofSetColor(ofColor::fromHsb(teinte, 255, 255));
-```
-
-`t * 40` grandit sans fin. `fmod(a, b)` est le reste de la division de `a` par `b` pour des nombres à virgule : le résultat repart à 0 chaque fois qu'il atteint 255. La teinte fait le tour de la roue en un peu plus de six secondes, et le cercle passe par toutes les couleurs pures, dans l'ordre, sans jamais griser. Compare avec le cercle RGB à côté, piloté par les trois cosinus du cours 08.
-
-## 6. Teinte selon l'indice
-
-```cpp
-for (int i = 0; i < prevX.size(); i++) {
-	ofSetColor(ofColor::fromHsb(i * 10, 255, 255));
-	ofDrawCircle(prevX[i], prevY[i], 5 + i);
-}
-```
-
-La traînée du cours 08, en une ligne de couleur : la teinte est `i * 10`, la traînée est un arc-en-ciel. C'est le motif « nombre qui dépend de l'indice » du cours 08, avec le bon outil.
-
-## 7. Dégradé : l'interpolation
-
-```cpp
-ofColor depart(255, 80, 0);
-ofColor arrivee(0, 120, 255);
-ofSetColor(depart.getLerped(arrivee, p));     // p entre 0 et 1
-```
-
-`getLerped` (linear interpolation) calcule la couleur qui se trouve à la proportion `p` entre les deux : `p = 0` donne `depart`, `p = 1` donne `arrivee`, `p = 0.5` le milieu. Dans le cube RGB, c'est une ligne droite entre deux points. Ce mot, interpoler, reviendra pour des positions, des tailles, tout ce qu'on veut faire passer doucement d'une valeur à une autre.
-
-## Exercices
-
-1. Reprends le rendu du cours 08 et remplace les trois cosinus par une teinte qui avance.
-2. Fais tourner la teinte de la traînée avec le temps : `i * 10 + t * 40`. Il faudra `fmod`.
-3. Compare le dégradé `getLerped` avec un dégradé fait en interpolant la teinte : `fromHsb(hDepart + (hArrivee - hDepart) * p, 255, 255)`. Lequel passe par le gris ?
-4. Colore les cercles du cours 03 avec une teinte aléatoire, saturation et luminosité fixes. Compare avec trois `ofRandom` sur r, g, b : lequel donne des couleurs qui « vont ensemble » ?
-
-## Le code complet, pas à pas
-
-Le programme entier, dans l'ordre des fichiers. Les blocs ci-dessous mis bout à bout donnent exactement `ofApp09.cpp`.
-
-### Le fichier `ofApp09.h`
-
-La table des matières du programme : les blocs qui existent et les variables partagées entre eux, avec leurs valeurs de départ.
-
-```cpp
-#pragma once
-#include "ofMain.h"
-
-// 09 - Couleur : RGB, HSB, dégradés
-// Nouveau : pas de sketch Processing d'origine
-// Notions : ofColor comme valeur manipulable, espace RGB (un cube à trois axes) et espace HSB
-//           (teinte / saturation / luminosité), ofColor::fromHsb, teinte selon le temps et
-//           selon l'indice (relit la traînée de 08), interpolation entre deux couleurs (getLerped)
-
-class ofApp : public ofBaseApp {
-public:
-	void setup();
-	void update();
-	void draw();
-
-	std::vector<float> prevX;
-	std::vector<float> prevY;
-	float t = 0;
-};
-```
-
-### En tête du fichier `ofApp09.cpp`
-
-L'inclusion du `.h`, qui rend visibles les variables partagées et les blocs déclarés.
-
-```cpp
-#include "ofApp09.h"
-```
-
-### Étape 1 — `setup()`
-
-Exécuté une fois au lancement : la fenêtre, les chargements, les valeurs de départ.
-
-```cpp
-void ofApp::setup() {
-	ofSetWindowShape(800, 600);
-	ofSetCircleResolution(64);
-}
-```
-
-### Étape 2 — `update()`
-
-Exécuté à chaque frame, avant le dessin : tout ce qui change.
-
-```cpp
-void ofApp::update() {
-	t = ofGetElapsedTimef();
-
-	// Même traînée qu'en 07 / 08 : 25 dernières positions de la souris
-	prevX.push_back(mouseX);
-	prevY.push_back(mouseY);
-	if (prevX.size() > 25) {
-		prevX.erase(prevX.begin());
-		prevY.erase(prevY.begin());
-	}
-}
-```
-
-### Étape 3 — `draw()`
-
-Exécuté à chaque frame, après `update()` : uniquement du dessin.
-
-```cpp
-void ofApp::draw() {
-	ofBackground(30);
 	float largeur = ofGetWidth();
-
-	// ---- 1. Les trois axes de HSB, une bande par axe ----
-	// Jusqu'ici une couleur = trois quantités de lumière (rouge, vert, bleu) : c'est l'espace RGB,
-	// un cube dont les trois axes vont de 0 à 255. Pratique pour l'écran, pénible pour l'humain :
-	// "la même couleur, un peu plus claire" ne se calcule pas facilement en RGB.
-	// HSB décrit la couleur comme on la nomme : une teinte (position sur la roue des couleurs),
-	// une saturation (du gris à la couleur pure) et une luminosité (du noir à la couleur pure).
-	// ATTENTION : en openFrameworks les trois vont de 0 à 255, la teinte n'est pas en degrés.
-	// ofColor::fromHsb(h, s, b) construit la couleur ; on lui passe le résultat à ofSetColor.
-	float teinteChoisie = mouseX / largeur * 255;   // la souris choisit la teinte des bandes 2 et 3
+	float teinteChoisie = mouseX / largeur * 255;   // la souris choisit la teinte
 
 	for (int x = 0; x < largeur; x++) {
-		float p = x / largeur * 255;                   // 0 à gauche, 255 à droite
+		float p = x / largeur * 255;                // 0 à gauche, 255 à droite
 
-		// Teinte : on fait le tour de la roue, saturation et luminosité au maximum
-		ofSetColor(ofColor::fromHsb(p, 255, 255));
+		ofSetColor(ofColor::fromHsb(p, 255, 255));              // bande 1 : la teinte
 		ofDrawLine(x, 20, x, 60);
 
-		// Saturation : du gris (0) à la couleur pure (255), teinte fixée par la souris
-		ofSetColor(ofColor::fromHsb(teinteChoisie, p, 255));
+		ofSetColor(ofColor::fromHsb(teinteChoisie, p, 255));    // bande 2 : la saturation
 		ofDrawLine(x, 70, x, 110);
 
-		// Luminosité : du noir (0) à la couleur pure (255)
-		ofSetColor(ofColor::fromHsb(teinteChoisie, 255, p));
+		ofSetColor(ofColor::fromHsb(teinteChoisie, 255, p));    // bande 3 : la luminosité
 		ofDrawLine(x, 120, x, 160);
 	}
-	ofSetColor(255);
-	ofDrawBitmapString("teinte (H)", 10, 15);
-	ofDrawBitmapString("saturation (S)", 10, 68);
-	ofDrawBitmapString("luminosite (B)", 10, 118);
+```
 
-	// ---- 2. Animer une couleur : la méthode de 08 contre HSB ----
-	// En 08, trois cosinus déphasés sur r, g, b : ça bouge, mais on ne contrôle rien
-	// (la couleur passe par des gris, des teintes sales, on ne sait pas laquelle vient après).
-	float r = (cos(t * 1.2f) / 2 + 0.5f) * 255;
-	float g = (cos(t * 1.0f) / 2 + 0.5f) * 255;
+Trois bandes : la roue entière, puis gris → couleur pure, puis noir → couleur pleine. Bouge la souris : les bandes 2 et 3 changent de teinte. Une ligne verticale par pixel, et à chaque pixel **un seul axe varie** — on *voit* les axes.
+
+Les nouveautés :
+
+- `ofColor` est un type qui contient une couleur entière. C'est une `struct` (cours 07) : quatre variables `r`, `g`, `b`, `a` regroupées, accessibles avec un point (`c.r`). On peut la ranger dans une variable, la passer à `ofSetColor`, la transformer.
+- `ofColor::fromHsb(h, s, b)` construit une couleur depuis ses axes HSB. Le `::` se lit « de la famille `ofColor` » — un outil rangé avec le type. Dans l'autre sens, `c.getHue()`, `c.getSaturation()`, `c.getBrightness()` lisent les axes d'une couleur existante.
+- `ofDrawLine(x1, y1, x2, y2)` : un trait entre deux points.
+
+> **Essaie** : inverse la première bande (`255 - p`). Puis ajoute une quatrième bande de ton invention — par exemple saturation **et** luminosité qui varient ensemble.
+
+## 3. Étape 2 — animer une teinte
+
+Sous les bandes, deux cercles côte à côte — l'ancien monde et le nouveau :
+
+```cpp
+	// la méthode du cours 08 : trois cosinus déphasés
+	float r = (cos(t * 1.2f)  / 2 + 0.5f) * 255;
+	float g = (cos(t * 1.0f)  / 2 + 0.5f) * 255;
 	float b = (cos(t * 0.86f) / 2 + 0.5f) * 255;
 	ofSetColor(r, g, b);
 	ofDrawCircle(150, 260, 60);
 
-	// En HSB : la teinte avance avec le temps, saturation et luminosité restent pleines.
-	// fmod est le modulo des float : la teinte repasse à 0 après 255 et fait le tour de la roue.
+	// en HSB : la teinte avance, saturation et luminosité pleines
 	float teinte = fmod(t * 40, 255);
 	ofSetColor(ofColor::fromHsb(teinte, 255, 255));
 	ofDrawCircle(400, 260, 60);
+```
 
-	// ---- 3. Dégradé entre deux couleurs : interpolation ----
-	// depart.getLerped(arrivee, p) : p = 0 donne depart, p = 1 donne arrivee, 0.5 le milieu.
-	// Chaque canal est interpolé séparément : c'est une droite dans le cube RGB.
-	ofColor depart(255, 80, 0);
-	ofColor arrivee(0, 120, 255);
-	for (int x = 520; x < 780; x++) {
-		float p = (x - 520) / 260.0f;
-		ofSetColor(depart.getLerped(arrivee, p));
-		ofDrawLine(x, 200, x, 320);
-	}
+(Avec `t = ofGetElapsedTimef();` dans `update()`, comme au cours 08.) Laisse tourner et compare : à gauche ça bouge mais on ne contrôle rien — teintes sales, passages par le gris ; à droite, **toutes les couleurs pures, dans l'ordre**, sans jamais griser.
 
-	// ---- 4. Teinte selon l'indice : la traînée de 08 avec une seule ligne de couleur ----
-	// 25 éléments x 10 = 250 : la traînée parcourt presque toute la roue
+`fmod(a, b)` est le reste de la division pour les `float` : `t * 40` grandit sans fin, `fmod(t * 40, 255)` repart à 0 après 255 — la teinte fait le tour de la roue, encore et encore.
+
+> **Essaie** : `t * 200` au lieu de `t * 40`. Puis calcule : à `t * 40`, combien de secondes dure un tour de roue complet ?
+
+## 4. Étape 3 — la traînée arc-en-ciel
+
+Reprends la file de 25 positions des cours 07-08 (`prevX`, `prevY`, remplies dans `update()`), et dessine :
+
+```cpp
 	for (int i = 0; i < prevX.size(); i++) {
 		ofSetColor(ofColor::fromHsb(i * 10, 255, 255));
 		ofDrawCircle(prevX[i], prevY[i], 5 + i);
 	}
-
-	// À retenir pour la suite (lecture d'une couleur existante, utilisé en 11) :
-	//   c.getHue(), c.getSaturation(), c.getBrightness()   : lire les trois axes HSB d'un ofColor
-	//   c.setHue(h)                                        : changer la teinte sans toucher au reste
-	//   c.r, c.g, c.b                                      : les trois axes RGB (déjà vus en 06)
-	// Comme une couleur est un point dans un cube, la distance entre deux couleurs se calcule
-	// comme la distance entre deux points : Pythagore en 3D. On s'en servira en 12.
-
-	// Exercices :
-	// - reprendre le rendu de 08 et remplacer les trois cosinus par une teinte qui avance
-	// - faire tourner la teinte de la traînée avec le temps (i * 10 + t * 40)
-	// - dégradé entre deux couleurs en passant par HSB (interpoler la teinte) : comparer avec getLerped
-}
 ```
+
+La traînée du cours 08, en **une** ligne de couleur : la teinte vaut `i * 10`, la traînée est un arc-en-ciel. C'est le motif « nombre qui dépend de l'indice », avec le bon outil.
+
+> **Essaie** : fais tourner l'arc-en-ciel avec le temps — `i * 10 + t * 40`. Il faudra `fmod` pour rester sur la roue.
+
+## 5. Étape 4 — le dégradé : l'interpolation
+
+```cpp
+	ofColor depart(255, 80, 0);
+	ofColor arrivee(0, 120, 255);
+	for (int x = 520; x < 780; x++) {
+		float p = (x - 520) / 260.0f;                 // 0 → 1
+		ofSetColor(depart.getLerped(arrivee, p));
+		ofDrawLine(x, 200, x, 320);
+	}
+```
+
+`a.getLerped(b, p)` (*linear interpolation*) calcule la couleur à la proportion `p` entre les deux : `p = 0` donne `depart`, `p = 1` donne `arrivee`, `0.5` le milieu. Dans le cube RGB, c'est une **ligne droite** entre deux points.
+
+Retiens le mot : **interpoler**. Il reviendra pour des positions, des tailles — tout ce qu'on veut faire passer en douceur d'une valeur à une autre.
+
+> **Essaie** : compare avec un dégradé fait en interpolant la **teinte** : `fromHsb(hDepart + (hArrivee - hDepart) * p, 255, 255)`. Lequel des deux passe par le gris, et pourquoi ?
+
+## Exercices
+
+1. **Lire avant de lancer** — décris la bande produite par `ofColor::fromHsb(0, 255, p)` quand `p` va de 0 à 255. Puis celle de `fromHsb(p, 0, 255)`. Vérifie ensuite.
+
+2. **Le 08 apprivoisé** — reprends ton rendu du cours 08 et remplace les trois cosinus par une teinte qui avance (`fmod(t * 40, 255)`). Même vie, zéro gris.
+
+3. **Les couleurs qui vont ensemble** — les cercles du cours 03, colorés de deux façons : teinte aléatoire (saturation et luminosité fixes) contre trois `ofRandom` sur r, g, b. Lequel donne une palette harmonieuse, et pourquoi ?
+
+4. **Le coucher de soleil** *(plus costaud)* — un fond en dégradé **vertical** (une boucle sur `y`, des lignes horizontales, `getLerped` de l'orange au bleu nuit), et un soleil dont la teinte dépend de sa hauteur : plus la souris descend, plus il rougit.
 
 ## Ce qu'il faut retenir
 
-- RGB est un cube (trois quantités de lumière), HSB une roue (teinte) plus deux réglages (saturation, luminosité). Les six nombres vont de 0 à 255.
-- `ofColor` range une couleur dans une variable ; `c.r`, `c.g`, `c.b` sont ses composantes.
-- `ofColor::fromHsb(h, s, b)` fabrique une couleur depuis HSB ; `c.getHue()` etc. lisent HSB depuis une couleur.
-- `fmod(a, b)` : le reste de la division pour les `float`, pour faire boucler une valeur.
-- `a.getLerped(b, p)` : la couleur à la proportion `p` entre `a` et `b`.
-- Une couleur est un point à trois coordonnées : la distance entre deux couleurs se calcule comme entre deux points. On s'en servira au cours 12.
+- RGB = le cube de l'écran ; HSB = la roue humaine : teinte, saturation, luminosité — 0 à 255 partout en openFrameworks.
+- `ofColor` : la couleur comme **valeur** (une struct : `c.r`, `c.getHue()`…) ; `ofColor::fromHsb(h, s, b)` la construit depuis la roue.
+- `fmod(a, b)` : le reste à virgule — l'outil des grandeurs qui tournent en rond, comme la teinte.
+- Teinte selon le temps : une couleur qui vit sans griser ; teinte selon l'indice : un arc-en-ciel le long d'une file.
+- `a.getLerped(b, p)` : **interpoler** — la valeur à la proportion `p` entre deux bornes.

@@ -7,18 +7,13 @@ ICI = os.path.dirname(os.path.abspath(__file__))
 RACINE = os.path.join(ICI, '..')
 
 LECONS = {
-    # 00-premier-contact.md : exclu — la leçon construit le code pas à pas
-    # elle-même, la section « code complet » y ferait doublon.
-    '01-variables.md': 'ofApp01', '02-boucle-for.md': 'ofApp02',
-    '03-aleatoire.md': 'ofApp03', '04-listes.md': 'ofApp04', '05-cycle-souris.md': 'ofApp05',
-    '06-animation.md': 'ofApp06', '07-trainee.md': 'ofApp07', '08-trainee-evoluee.md': 'ofApp08',
-    '09-couleur.md': 'ofApp09', '10-image-pixel.md': 'ofApp10', '11-filtres.md': 'ofApp11',
+    # Cours 00 à 18 : exclus — ces leçons construisent le code pas à pas
+    # elles-mêmes (versions successives d'ofApp.h/.cpp), la section
+    # « code complet » y ferait doublon. Ne restent que les leçons du bloc
+    # couleur avancée, encore au format concepts + code en annexe.
     '11a-gamma.md': 'ofApp11a', '11b-tone-mapping.md': 'ofApp11b', '11c-lut.md': 'ofApp11c',
     '11d-ycbcr.md': 'ofApp11d', '11e-oklab.md': 'ofApp11e', '11f-daltonisme.md': 'ofApp11f',
-    '11g-palette-dithering.md': 'ofApp11g', '12-pointillisme.md': 'ofApp12',
-    '13-cercle-de-cercles.md': 'ofApp13', '14-filtres-geometriques.md': 'ofApp14',
-    '15-grille-rotation.md': 'ofApp15', '16-fleurs-polaires.md': 'ofApp16', '17-convolution.md': 'ofApp17',
-    '18-peinture-particules.md': 'ofApp18',
+    '11g-palette-dithering.md': 'ofApp11g',
 }
 
 INTROS = {

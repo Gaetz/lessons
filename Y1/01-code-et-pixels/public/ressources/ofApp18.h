@@ -28,22 +28,22 @@ public:
 	ofFbo   toile;            // ce qui a déjà été peint (étape 2)
 
 	std::vector<std::string> images = { "pandaroux.jpg", "redpanda.jpg", "chibi-redpanda.jpg" };
-	int imageCourante = 0;
+	int imageCourante { 0 };
 
 	// Étape 1 : une particule = une position et une direction (angle en radians)
-	int nbParticules = 600;
+	int nbParticules { 600 };
 	std::vector<float> posX;
 	std::vector<float> posY;
 	std::vector<float> angle;
-	float vitesse = 80;       // pixels par seconde
+	float vitesse { 80 };       // pixels par seconde
 
 	// Étapes activables
-	bool champDirection = true;   // 3
-	bool suivreFormes = true;     // 4
-	bool couleurVivante = true;   // 5
-	bool souris = true;           // 6
+	bool champDirection { true };   // 3
+	bool suivreFormes { true };     // 4
+	bool couleurVivante { true };   // 5
+	bool souris { true };           // 6
 
-	bool effacer = false;
-	bool montrerContours = false;
-	float t = 0;
+	bool effacer { false };
+	bool montrerContours { false };
+	float t { 0 };
 };

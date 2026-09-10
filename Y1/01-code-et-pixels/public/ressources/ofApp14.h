@@ -20,9 +20,9 @@ public:
 
 	ofImage source;
 	ofImage resultat;
-	int   effet = 0;
-	float parametre = 0.5f;
-	float t = 0;
+	int   effet { 0 };
+	float parametre { 0.5f };
+	float t { 0 };
 	std::vector<std::string> noms = {
 		"original", "miroir", "rotation 180", "pixelisation", "vagues", "glitch (canaux decales)"
 	};

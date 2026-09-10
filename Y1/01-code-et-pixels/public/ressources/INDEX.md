@@ -2,7 +2,7 @@
 
 19 fichiers de référence (00 à 18), plus le bloc « couleur avancée » (09a sans code, 11a à 11g), un par notion, dans l'ordre pédagogique. Chaque paire `ofAppNN.h` / `ofAppNN.cpp` déclare la classe `ofApp` : un seul exemple est compilable à la fois dans un projet.
 
-**Utilisation** : copier la paire dans `src/`, remplacer `#include "ofApp.h"` par `#include "ofAppNN.h"` dans `main.cpp`. Les images vont dans `bin/data/`.
+**Utilisation** : les leçons se suivent dans `ofApp.h` / `ofApp.cpp`, par étapes (voir chaque document). Les paires `ofAppNN` sont la référence de l'état final de chaque cours : pour en lancer une telle quelle, la copier dans `src/` et remplacer `#include "ofApp.h"` par `#include "ofAppNN.h"` dans `main.cpp`. Les images vont dans `bin/data/`.
 
 **Cours écrits** : un document Markdown par leçon dans [`cours/`](cours/README.md), avec illustrations, pour des débutants qui découvrent le C++. Pour installer les outils (Visual Studio 2026, openFrameworks) : [Préparation de l'environnement de développement](cours/00-environnement.md).
 

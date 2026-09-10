@@ -37,7 +37,7 @@ void ofApp::calculerContours() {
 
 	for (int y = 0; y < h; y++) {
 		for (int x = 0; x < w; x++) {
-			float somme = 0;
+			float somme { 0 };
 			for (int dy = -1; dy <= 1; dy++) {
 				for (int dx = -1; dx <= 1; dx++) {
 					int px = ofClamp(x + dx, 0, w - 1);
@@ -135,7 +135,7 @@ void ofApp::draw() {
 
 		// Étape 2 : la couleur du pixel de la source sous la particule (10)
 		ofColor c = source.getColor(px, py);
-		float taille = 3;
+		float taille { 3 };
 
 		// Étape 4 : touches fines sur les bords, larges dans les aplats
 		if (suivreFormes) {

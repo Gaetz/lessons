@@ -1,82 +1,107 @@
-# Cours 16 — Trigonométrie : fleurs en coordonnées polaires
+# Cours 16 — Fleurs polaires
 
-> **Fichiers** : `ofApp16.h` + `ofApp16.cpp`
 > **Avant** : cours 13 (angle, rayon, `cos`, `sin`), cours 04 (`std::vector`).
+> **Comment travailler** : toujours dans `ofApp.h` et `ofApp.cpp`, par versions successives. `ofApp16.h` / `ofApp16.cpp` : la référence téléchargeable de l'état final.
 
-Quatorze fleurs emboîtées qui tournent à des vitesses différentes. Une fleur est un cercle dont le rayon **ondule** le long du tour. Pour le dessiner il faut une forme libre, point par point.
+Quatorze fleurs concentriques qui tournent à des vitesses différentes. Derrière l'image : une nouvelle façon de décrire un point — les coordonnées **polaires** — et une nouvelle façon de dessiner — une forme libre, sommet par sommet. À la fin, l'exercice qui referme le cours 14 : la loupe et le tourbillon.
 
-![Fleurs violettes et bleues emboîtées en mode additif](img/16-fleurs.png)
+![Fleurs concentriques violettes et bleues sur fond noir](img/16-fleurs.png)
 
 ## 1. Coordonnées polaires
 
-Jusqu'ici un point était `(x, y)`. On peut aussi le décrire par `(angle, rayon)` : dans quelle direction, à quelle distance du centre. Ce sont les coordonnées **polaires**. Le passage vers `(x, y)` est la formule du cours 13 :
+Jusqu'ici un point était `(x, y)`. On peut aussi le décrire par `(angle, rayon)` : dans quelle **direction**, à quelle **distance** du centre. Ce sont les coordonnées **polaires**, et le passage vers `(x, y)` est la formule du cours 13 :
 
 ```cpp
 float x = rayon * cos(angle);
 float y = rayon * sin(angle);
 ```
 
-L'intérêt : certaines formes sont simples en polaire et compliquées en cartésien. Un cercle, c'est « rayon constant ». Une spirale, « rayon qui grandit avec l'angle ». Une fleur :
+L'intérêt : certaines formes sont simples en polaire et compliquées en cartésien. Un cercle ? « rayon constant ». Une spirale ? « rayon qui grandit avec l'angle ». Une fleur ? c'est l'étape 2.
 
-## 2. Un rayon qui ondule
+## 2. Étape 1 — une forme libre, point par point
+
+Dans le `.h` : `int nbPoints { 200 };`, `int period { 12 };`, `float amplitude { 20 };`. Et une première fleur, seule au centre (fenêtre 400 × 400) :
+
+```cpp
+void ofApp::draw() {
+	ofBackground(0);
+	ofPushMatrix();
+	ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
+
+	ofFill();
+	ofSetColor(60, 20, 90);
+	ofBeginShape();
+	for (int i = 0; i < nbPoints; i++) {
+		float angle = i * TWO_PI / nbPoints;
+		float fRadius = amplitude * cos(angle * period);
+		float x = (100 + fRadius) * cos(angle);
+		float y = (100 + fRadius) * sin(angle);
+		ofVertex(x, y);
+	}
+	ofEndShape(true);
+
+	ofPopMatrix();
+}
+```
+
+Une fleur à douze pétales. Deux nouveautés, une par moitié du code :
+
+**La forme libre.** `ofDrawCircle` et compagnie dessinent des formes toutes faites. Pour une forme quelconque, on donne ses sommets un par un : `ofBeginShape()` ouvre, chaque `ofVertex(x, y)` ajoute un sommet, `ofEndShape(true)` ferme (le `true` relie le dernier au premier) et remplit. Avec 200 sommets, la courbe paraît lisse.
+
+**Le rayon qui ondule.** Le rayon n'est pas constant : `100 + amplitude * cos(angle * period)`. Quand l'angle fait un tour, `angle * period` fait `period` tours — le cosinus oscille `period` fois : `period` bosses, `period` **pétales**. `amplitude` est leur hauteur.
 
 ![Cercle gris de rayon r, fleur bleue dont le rayon oscille autour de r](img/16-polaire.png)
 
-```cpp
-float angle = i * TWO_PI / nbPoints;
-float fRadius = amplitude * cos(angle * period);
-float x = (r + fRadius) * cos(angle + rotation);
-float y = (r + fRadius) * sin(angle + rotation);
-```
+> **Essaie** : `period` à 3, 5, 12 ; `amplitude` à 5, 40. Tu contrôles la fleur avec deux nombres.
 
-Le rayon n'est plus `r` mais `r + amplitude * cos(angle * period)`. Quand l'angle fait un tour, `angle * period` fait `period` tours, donc le cosinus oscille `period` fois : `period` bosses, `period` pétales. `amplitude` est leur hauteur. Le `+ rotation` fait tourner la fleur entière.
+## 3. Étape 2 — quatorze fleurs, quatorze vitesses
 
-Change `period` : 3, 5, 12. Change `amplitude` : 5, 40. Tu contrôles la fleur avec deux nombres.
-
-## 3. Une forme libre : point par point
+Dans le `.h` : `int nbFlowers { 14 };` et `std::vector<float> rotations;`. Dans `setup()` :
 
 ```cpp
-ofBeginShape();
-for (int i = 0; i < nbPoints; i++) {
-	// ... calcul de x, y
-	ofVertex(x, y);
-}
-ofEndShape(true);
+	rotations = std::vector<float>(nbFlowers, 0.0f);
 ```
 
-`ofDrawCircle` et compagnie dessinent des formes toutes faites. Pour une forme quelconque, on donne ses sommets un par un : `ofBeginShape()` ouvre la forme, chaque `ofVertex(x, y)` ajoute un sommet, `ofEndShape(true)` la ferme (le `true` relie le dernier sommet au premier) et la remplit. Avec 200 sommets, la courbe paraît lisse.
+Cette écriture crée d'un coup une liste de `nbFlowers` éléments valant `0.0f` — au lieu de quatorze `push_back` (cours 04).
 
-## 4. Plusieurs fleurs, plusieurs vitesses
+Dans `update()` :
 
 ```cpp
-rotations = std::vector<float>(nbFlowers, 0.0f);
+	float dt = ofGetLastFrameTime();
+	for (int f = 0; f < nbFlowers; f++) {
+		float sens = (f % 2 == 0) ? 1.0f : -1.0f;
+		float speed = f * 0.12f * sens;
+		rotations[f] = rotations[f] + speed * dt;
+	}
 ```
 
-Une liste de 14 rotations, une par fleur, toutes à 0 au départ. Cette écriture crée directement une liste de `nbFlowers` éléments valant `0.0f`, au lieu de 14 `push_back`.
+Chaque fleur a sa vitesse angulaire (cours 15) : proportionnelle à `f`, alternée en sens par le `%` du cours 13. La ligne `sens` utilise un raccourci nouveau : `condition ? valeurSiVrai : valeurSiFaux` — un `if` qui tient sur une ligne et **renvoie une valeur**. Équivalent de :
 
 ```cpp
-for (int f = 0; f < nbFlowers; f++) {
-	float sens = (f % 2 == 0) ? 1.0f : -1.0f;
-	float speed = f * 0.12f * sens;
-	rotations[f] = rotations[f] + speed * dt;
-}
+	float sens;
+	if (f % 2 == 0) sens = 1.0f;
+	else            sens = -1.0f;
 ```
 
-Chaque fleur a sa vitesse : proportionnelle à `f`, donc les fleurs extérieures (petit `f`) tournent lentement et les intérieures vite. Le `%` du cours 13 alterne le sens.
-
-La ligne `sens` utilise un raccourci : `condition ? valeurSiVrai : valeurSiFaux`. C'est un `if` qui tient sur une ligne et **renvoie une valeur**. Équivalent de :
+Range ensuite la fleur dans une fonction `drawFlower(int fIndex, float r, float rotation)` (le `+ rotation` s'ajoute à l'angle de chaque sommet), et dessine-les toutes :
 
 ```cpp
-float sens;
-if (f % 2 == 0) sens = 1.0f;
-else            sens = -1.0f;
+	for (int f = 0; f < nbFlowers; f++) {
+		if (f % 2 == 0) ofSetColor(60, 20, 90);
+		else            ofSetColor(20, 60, 90);
+		drawFlower(f, 150 - f * 10, rotations[f]);
+	}
 ```
 
-Dans `draw()`, la fleur `f` est dessinée avec le rayon `150 - f * 10` et la rotation `rotations[f]` : quatorze cercles concentriques qui deviennent des fleurs.
+Quatorze rayons décroissants (`150 - f * 10`) : des fleurs emboîtées, les extérieures lentes, les intérieures rapides.
 
-## 5. Ce que le mode additif fait ici
+> **Essaie** : une seule fleur dont `period` dépend de la souris — `period` est un entier, donc `mouseX / 50` (division entière assumée !). Puis fais **pulser** `amplitude` avec le temps (cours 08).
 
-Deux couleurs sombres alternées, en `OF_BLENDMODE_ADD` (cours 13) : là où les fleurs se recouvrent, les couleurs s'ajoutent et s'éclaircissent. Les recouvrements deviennent lisibles alors que des formes opaques se cacheraient mutuellement.
+## 4. Étape 3 — le mode additif au travail
+
+Encadre le dessin de `OF_BLENDMODE_ADD` … `OF_BLENDMODE_ALPHA` (cours 13). Deux couleurs **sombres** alternées : là où les fleurs se recouvrent, les couleurs s'ajoutent et s'éclaircissent. Les recouvrements deviennent lisibles, alors que des formes opaques se cacheraient mutuellement.
+
+> **Essaie** : remplace les deux couleurs fixes par une teinte selon `f` (`ofColor::fromHsb`) — quatorze fleurs, quatorze secteurs de la roue.
 
 ## Exercice final : loupe et tourbillon sur une image
 
@@ -91,151 +116,19 @@ Le `1 - r / R` du tourbillon est la proportion du cours 12 : rotation maximale a
 
 ## Exercices
 
-1. Une spirale : `rayon = angle * 10`, avec un angle qui va de 0 à `6 * TWO_PI`. Utilise `ofNoFill()` avant `ofBeginShape`.
-2. Fais pulser `amplitude` avec le temps.
-3. Une seule fleur dont `period` change avec `mouseX / 50` : entier, donc `(int)`.
-4. Remplis chaque fleur d'une teinte selon `f` avec `ofColor::fromHsb`.
-5. L'exercice final ci-dessus. Commence par la loupe, sans animation.
+1. **Lire avant de lancer** — avec `period = 1` et `amplitude = 50`, à quoi ressemble la « fleur » ? Et avec `period = 0` ? Réponds en pensant au cosinus, puis vérifie.
 
-## Le code complet, pas à pas
+2. **La spirale** — « un rayon qui grandit avec l'angle » : `rayon = angle * 10`, avec un angle qui va de 0 à `6 * TWO_PI` (six tours). `ofNoFill()` avant `ofBeginShape`, et ne ferme pas la forme (`ofEndShape(false)`).
 
-Le programme entier, dans l'ordre des fichiers. Les blocs ci-dessous mis bout à bout donnent exactement `ofApp16.cpp`.
+3. **L'étoile de mer** — une fleur dont l'amplitude **elle-même** ondule lentement avec le temps, et dont la rotation suit la souris (`atan2(mouseY - 200, mouseX - 200)` donne l'angle sous lequel la souris voit le centre — l'inverse de `cos`/`sin`, qui sert aussi dans l'exercice final).
 
-### Le fichier `ofApp16.h`
-
-La table des matières du programme : les blocs qui existent et les variables partagées entre eux, avec leurs valeurs de départ.
-
-```cpp
-#pragma once
-#include "ofMain.h"
-
-// 16 - Trigonométrie : fleurs en coordonnées polaires
-// Sketch d'origine : Cours 5/TrigoFlower
-// Notions : coordonnées polaires (angle, rayon) -> cartésiennes, modulation du rayon
-//           par un cosinus (pétales), forme libre ofBeginShape / ofVertex / ofEndShape,
-//           plusieurs instances animées à des vitesses différentes.
-//           Exercice final : loupe et tourbillon sur image (polaire -> cartésien appliqué à 14)
-// Correction : le sketch d'origine utilisait "flower_index" au lieu de "f_index" dans draw()
-
-class ofApp : public ofBaseApp {
-public:
-	void setup();
-	void update();
-	void draw();
-
-	void drawFlower(int fIndex, float r, float speed);
-
-	int   nbPoints = 200;
-	float amplitude = 15;     // hauteur des pétales
-	int   period = 7;         // nombre de pétales
-	int   nbFlowers = 14;
-	std::vector<float> rotations;
-};
-```
-
-### En tête du fichier `ofApp16.cpp`
-
-L'inclusion du `.h`, qui rend visibles les variables partagées et les blocs déclarés.
-
-```cpp
-#include "ofApp16.h"
-```
-
-### Étape 1 — `setup()`
-
-Exécuté une fois au lancement : la fenêtre, les chargements, les valeurs de départ.
-
-```cpp
-void ofApp::setup() {
-	ofSetWindowShape(400, 400);
-	// Une rotation par fleur, toutes à 0 au départ.
-	// Python : rotations.append(0) dans une boucle. C++ : constructeur avec taille + valeur.
-	rotations = std::vector<float>(nbFlowers, 0.0f);
-}
-```
-
-### Étape 2 — `update()`
-
-Exécuté à chaque frame, avant le dessin : tout ce qui change.
-
-```cpp
-void ofApp::update() {
-	float dt = ofGetLastFrameTime();
-	for (int f = 0; f < nbFlowers; f++) {
-		// Une fleur sur deux tourne dans l'autre sens
-		float sens = (f % 2 == 0) ? 1.0f : -1.0f;
-		// Le sketch ajoutait f * 0.002 par frame => f * 0.12 rad/s
-		float speed = f * 0.12f * sens;
-		rotations[f] = rotations[f] + speed * dt;
-	}
-}
-```
-
-### Étape 3 — `drawFlower()`
-
-Une fleur = un polygone de nbPoints sommets.
-
-```cpp
-// Une fleur = un polygone de nbPoints sommets.
-// Pour chaque sommet : un angle régulier, et un rayon r modulé par un cosinus.
-void ofApp::drawFlower(int fIndex, float r, float rotation) {
-	ofBeginShape();
-	for (int i = 0; i < nbPoints; i++) {
-		float angle = i * TWO_PI / nbPoints;
-		// cos(angle * period) oscille "period" fois sur un tour => "period" pétales
-		float fRadius = amplitude * cos(angle * period);
-		// Polaire -> cartésien
-		float x = (r + fRadius) * cos(angle + rotation);
-		float y = (r + fRadius) * sin(angle + rotation);
-		ofVertex(x, y);
-	}
-	ofEndShape(true);     // true = fermer la forme (CLOSE en Processing)
-}
-```
-
-### Étape 4 — `draw()`
-
-Exécuté à chaque frame, après `update()` : uniquement du dessin.
-
-```cpp
-void ofApp::draw() {
-	ofBackground(0);
-
-	ofPushMatrix();
-	ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
-
-	// Processing : blendMode(DIFFERENCE), qui inverse là où les fleurs se recouvrent.
-	// Sans équivalent direct en openFrameworks : on alterne deux couleurs en ADD,
-	// ce qui rend les recouvrements lisibles. (Un vrai DIFFERENCE se fera plus tard en shader.)
-	ofEnableBlendMode(OF_BLENDMODE_ADD);
-	ofFill();
-	for (int f = 0; f < nbFlowers; f++) {
-		if (f % 2 == 0) ofSetColor(60, 20, 90);
-		else            ofSetColor(20, 60, 90);
-		drawFlower(f, 150 - f * 10, rotations[f]);
-	}
-	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
-
-	ofPopMatrix();
-
-	// Alternative moderne à ofBeginShape : construire une ofPolyline
-	// (polyline.addVertex(x, y) ... polyline.close() ; polyline.draw())
-	// ou un ofPath pour un remplissage. À montrer quand on aborde les objets.
-
-	// Exercice (image) : loupe et tourbillon, avec la lecture "à l'envers" de 14.
-	// Pour chaque pixel (x, y) du résultat :
-	//   1. cartésien -> polaire autour de la souris : dx = x - mouseX, dy = y - mouseY,
-	//      r = sqrt(dx * dx + dy * dy), angle = atan2(dy, dx)
-	//   2. modifier : loupe = r * 0.5 si r < R ; tourbillon = angle + k * (1 - r / R) si r < R
-	//   3. polaire -> cartésien : sx = mouseX + r * cos(angle), sy = mouseY + r * sin(angle)
-	//   4. lire la source en (sx, sy), écrire dans le résultat en (x, y)
-}
-```
+4. **La loupe, puis le tourbillon** *(plus costaud)* — réalise l'exercice final ci-dessus, dans cet ordre : la loupe d'abord, sans animation ; le tourbillon ensuite. C'est le sommet des cours 12 à 16 — prends le temps.
 
 ## Ce qu'il faut retenir
 
-- Polaire `(angle, rayon)` vers cartésien : `x = rayon * cos(angle)`, `y = rayon * sin(angle)`. Inverse : `rayon = sqrt(dx*dx + dy*dy)`, `angle = atan2(dy, dx)`.
-- Une fleur : `rayon = r + amplitude * cos(angle * period)`, `period` pétales.
-- `ofBeginShape(); ofVertex(x, y); ... ofEndShape(true);` dessine une forme libre.
-- `std::vector<float>(n, valeur)` crée une liste de `n` éléments.
-- `condition ? a : b` : un `if` qui renvoie une valeur.
+- Coordonnées **polaires** : un point décrit par (angle, rayon) ; vers le cartésien par `(r cos a, r sin a)` ; retour par `atan2`.
+- Une fleur = un rayon modulé : `r + amplitude * cos(angle * period)` — `period` pétales, hauts de `amplitude`.
+- Forme libre : `ofBeginShape()` / `ofVertex(x, y)` / `ofEndShape(true)`.
+- `std::vector<float>(n, valeur)` : une liste de `n` éléments d'un coup.
+- `condition ? a : b` : le `if` d'une ligne qui renvoie une valeur.
+- Un paramètre par élément (ici la rotation de chaque fleur) rangé dans une liste : des mouvements individuels, un seul code.

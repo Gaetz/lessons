@@ -10,6 +10,7 @@
 class ofApp : public ofBaseApp {
 public:
 	void setup();
+	void update();
 	void draw();
 
 	// En Python les listes étaient des variables globales.

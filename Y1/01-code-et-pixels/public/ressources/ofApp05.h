@@ -14,6 +14,6 @@ public:
 
 	// Python : x = 0 / y = 0 en global, puis "global x, y" dans draw()
 	// C++    : membres de la classe, visibles partout dans ofApp
-	float x = 0;
-	float y = 0;
+	float x { 0 };
+	float y { 0 };
 };

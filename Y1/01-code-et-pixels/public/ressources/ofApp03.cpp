@@ -5,6 +5,10 @@ void ofApp::setup() {
 	ofBackground(200);
 }
 
+void ofApp::update() {
+
+}
+
 void ofApp::draw() {
 	// En Processing ce sketch n'a pas de draw() : il est exécuté UNE fois,
 	// donc les cercles aléatoires restent en place.

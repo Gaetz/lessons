@@ -9,8 +9,8 @@ void ofApp::setup() {
 	// print(x) en Python => std::cout << x << std::endl; en C++
 	// La console est visible en configuration Debug dans Visual Studio.
 	// (ofLogNotice() << x; est l'équivalent openFrameworks, même destination.)
-	int x = 50;
-	float pi = 3.14159f;
+	int x { 50 };
+	float pi { 3.14159f };
 	std::string nom = "Gaetan";
 
 	std::cout << x << std::endl;
@@ -48,7 +48,7 @@ void ofApp::setup() {
 
 	// ---- Liste de nombres construite par une boucle ----
 	// Créer une liste contenant tous les chiffres entre 0 et 9 inclus
-	int compteur = 0;
+	int compteur { 0 };
 	for (int i = 0; i < 10; i++) {
 		chiffres.push_back(compteur);
 		compteur = compteur + 1;
@@ -68,6 +68,10 @@ void ofApp::setup() {
 
 	// Variante moderne de la boucle, à montrer une fois les indices maîtrisés :
 	// for (const std::string& n : noms) { std::cout << n << std::endl; }
+}
+
+void ofApp::update() {
+
 }
 
 void ofApp::draw() {

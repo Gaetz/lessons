@@ -7,6 +7,10 @@ void ofApp::setup() {
 	}
 }
 
+void ofApp::update() {
+
+}
+
 // Distance entre deux points : théorème de Pythagore.
 // (openFrameworks fournit ofDist(ax, ay, bx, by) qui fait exactement ceci.)
 float ofApp::distance(float ax, float ay, float bx, float by) {

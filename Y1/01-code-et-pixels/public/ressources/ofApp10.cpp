@@ -11,6 +11,10 @@ void ofApp::setup() {
 	}
 }
 
+void ofApp::update() {
+
+}
+
 void ofApp::draw() {
 	ofSetColor(255);            // sans ça, l'image est teintée par la dernière couleur
 	img.draw(0, 0);

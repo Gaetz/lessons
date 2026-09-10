@@ -15,8 +15,8 @@ public:
 
 	void bear(float x, float y);
 
-	float x = 0;
-	float y = 0;
+	float x { 0 };
+	float y { 0 };
 	// Deux listes parallèles : xCoords[i] et yCoords[i] forment une position.
 	// (Étape suivante possible : un seul std::vector<glm::vec2>.)
 	std::vector<float> xCoords;

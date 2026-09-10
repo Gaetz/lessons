@@ -11,12 +11,13 @@
 class ofApp : public ofBaseApp {
 public:
 	void setup();
+	void update();
 	void draw();
 
 	float distance(float ax, float ay, float bx, float by);
 
 	ofImage img;
-	int windowWidth = 774;
-	int windowHeight = 516;
-	int tailleCercle = 20;
+	int windowWidth { 774 };
+	int windowHeight { 516 };
+	int tailleCercle { 20 };
 };

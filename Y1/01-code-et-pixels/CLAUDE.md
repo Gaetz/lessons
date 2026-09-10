@@ -35,10 +35,15 @@ pixels) — dépendances déclarées dans les en-têtes « Avant : » des docume
 
 Les paires `ofAppNN.h`/`.cpp` sont la **référence de l'auteur** (téléchargeable,
 et corrigé). L'étudiant, lui, ne crée aucun fichier : il modifie `ofApp.h` et
-`ofApp.cpp`, qui existent par défaut dans son projet. Le document du cours 00
-donne le code complet à y coller (section 2) AVANT de l'expliquer ; à partir
-du cours 01, la méthode générale est de copier la paire `ofAppNN` dans `src/`
-et de changer l'include de `main.cpp` (documentée dans 00-environnement.md).
+`ofApp.cpp`, qui existent par défaut dans son projet, en suivant les **étapes**
+du document — chaque étape donne le code AVANT de l'expliquer, et le programme
+tourne à chaque étape. Tous les documents 00-18 suivent ce gabarit :
+en-tête (Avant / Comment travailler), concept d'ouverture éventuel, étapes
+numérotées closes par un `> **Essaie**`, `## Exercices` de synthèse (3-4,
+dernier *(plus costaud)*), `## Ce qu'il faut retenir`. La section « Le code
+complet, pas à pas » a été supprimée de 00-18 (inserer_code.py ne régénère
+plus que les 11a-11g). Déclarations à valeur littérale en accolades
+(`int x { 400 };`) ; les initialisations calculées et les `for` gardent `=`.
 
 ## Le dossier ressources
 
@@ -68,14 +73,14 @@ AVANT la fonction filtre, « la machine d'abord, la recette après ») :
    les étapes longues sont scindées (1/2, 2/2), jamais plus de ~16 lignes ;
 4. les `keyPressed()` triviaux sont des encarts ; `versLineaire`/`versSRGB`
    sont montrées en 11a et seulement rappelées en 11b/11e/11f ;
-5. chaque cours à code se clôt sur une diapo « À vous » : 3 exercices tirés
-   du document, du plus élémentaire au plus dur, l'avancé marqué 🔥 (légende
-   sur la ligne d'envoi), et un renvoi au document pour le reste — elle reste
-   affichée pendant que les étudiants pratiquent, les corrigés et erreurs
-   types vont dans les notes orateur (seul le 09a, sans code, n'en a pas) ;
-6. la dernière diapo du cours — la diapo « À vous » — porte la ligne de
-   téléchargements en `ndp-credit` : cours complet + ofAppNN.h + ofAppNN.cpp
-   (+ data si besoin).
+5. chaque cours à code se clôt sur les diapos « À vous (1/2) / (2/2) » :
+   les exercices de synthèse du document EN ENTIER (code des « Lire avant
+   de lancer » compris, Autonomie comprise), répartis sur plusieurs pages —
+   JAMAIS de renvoi au document, ils doivent pouvoir se faire en cours ;
+   🔥 marque l'avancé (légende en fin), les corrigés et erreurs types vont
+   dans les notes orateur (seul le 09a, sans code, n'en a pas) ;
+6. la dernière diapo du cours porte la ligne de téléchargements en
+   `ndp-credit` : cours complet + ofAppNN.h + ofAppNN.cpp (+ data si besoin).
 
 Les notes orateur portent le fil de séance et les renvois aux exercices du
 document (dont les « Autonomie » des cours 03 et 07 — le 08 est le corrigé

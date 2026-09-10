@@ -69,6 +69,8 @@ C'est un **appel de fonction** : on demande à l'ordinateur de faire quelque cho
 | `800, 800` | ici deux paramètres, séparés par une virgule : largeur, hauteur |
 | `;` | le point-virgule termine l'appel. Sans lui, le programme refuse de compiler |
 
+![L'anatomie d'un appel de fonction : le nom, les paramètres, le point-virgule](img/00-anatomie-appel.png)
+
 Cette ligne est écrite dans le bloc `setup()`, qui est exécuté **une fois, au lancement** du programme. C'est là qu'on règle ce qui ne change pas.
 
 Une dernière chose : tout ce qui suit `//` sur une ligne est un **commentaire** — une note pour les humains, que l'ordinateur ignore.
@@ -129,6 +131,8 @@ Un écran fabrique toutes ses couleurs en mélangeant de la lumière rouge, vert
 Un quatrième nombre, facultatif, règle l'**opacité** : `ofSetColor(255, 0, 0, 150)` donne un rouge semi-transparent (255 = opaque, 0 = invisible).
 
 La couleur choisie reste active pour **toutes les formes qui suivent**, jusqu'au prochain `ofSetColor`.
+
+![Opacité 255 : la forme recouvre ; opacité 150 : les couleurs se mélangent](img/00-opacite.png)
 
 > **Essaie** : un cercle vert. Un cercle jaune. Deux cercles qui se chevauchent, le deuxième semi-transparent.
 
@@ -242,6 +246,8 @@ public:
 ```
 
 Le `.h` est la **table des matières** du programme : il liste les blocs qui existent. Toute nouvelle fonction s'y annonce, sinon le compilateur ne la connaît pas.
+
+![La fonction est un tampon : le dessin écrit une fois, appliqué à chaque appel](img/00-fonction-tampon.png)
 
 Regarde bien : `x` et `y` ne sont plus créées dans le dessin — ce sont les **paramètres** de la fonction. Celui qui appelle fournit les valeurs : `funnyFace(100, 100)` dessine une tête autour de (100, 100), `funnyFace(400, 400)` une autre plus loin. Une fonction, deux têtes, trois lignes dans `draw()`.
 
