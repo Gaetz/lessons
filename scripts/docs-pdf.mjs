@@ -2,16 +2,23 @@
 /**
  * Convertit les documents de cours markdown d'une leçon en PDF téléchargeables.
  *
- *   node scripts/docs-pdf.mjs Y1/01-code-et-pixels
+ *   node scripts/docs-pdf.mjs Y1/01-code-et-pixels           # incrémental
+ *   node scripts/docs-pdf.mjs Y1/01-code-et-pixels 06 11a     # seulement ceux-là
+ *   node scripts/docs-pdf.mjs Y1/01-code-et-pixels --force    # tout refaire
  *
  * Lit   <leçon>/public/ressources/cours/*.md
  * Écrit <leçon>/public/ressources/cours/pdf/*.pdf
+ *
+ * Incrémental : un PDF n'est régénéré que si son .md (ou une image du
+ * dossier img/, ou ce script) est plus récent que lui. Ça évite surtout de
+ * réécrire 29 binaires à chaque passage — Playwright date chaque PDF, git
+ * les verrait donc tous comme modifiés.
  *
  * Utilise markdown-it (dépendance de Slidev) et playwright-chromium (déjà
  * présent pour l'export Slidev). À relancer après toute modification des
  * documents (par exemple après cours/inserer_code.py).
  */
-import { readdir, readFile, writeFile, mkdir, rm } from 'node:fs/promises'
+import { readdir, readFile, writeFile, mkdir, rm, stat } from 'node:fs/promises'
 import { join, resolve, basename } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { createRequire } from 'node:module'
@@ -77,8 +84,38 @@ const CSS = `
   hr { border: none; border-top: .5pt solid #ccc; margin: 1.5em 0; }
 `
 
-const files = (await readdir(coursDir)).filter(f => f.endsWith('.md')).sort()
+const args = process.argv.slice(3)
+const force = args.includes('--force')
+const filtres = args.filter(a => a !== '--force')
+
+let files = (await readdir(coursDir)).filter(f => f.endsWith('.md')).sort()
+if (filtres.length) {
+  files = files.filter(f => filtres.some(x => f.startsWith(x)))
+}
 await mkdir(outDir, { recursive: true })
+
+// Un PDF est en retard si son .md, une image QU'IL RÉFÉRENCE, ou ce script
+// est plus récent que lui.
+const mtime = async p => (await stat(p)).mtimeMs
+const scriptMs = await mtime(new URL(import.meta.url).pathname)
+
+if (!force) {
+  const aFaire = []
+  for (const f of files) {
+    const pdfMs = await mtime(join(outDir, basename(f, '.md') + '.pdf')).catch(() => 0)
+    let srcMs = Math.max(await mtime(join(coursDir, f)), scriptMs)
+    const texte = await readFile(join(coursDir, f), 'utf8')
+    for (const m of texte.matchAll(/\]\((img\/[^)]+)\)/g)) {
+      srcMs = Math.max(srcMs, await mtime(join(coursDir, m[1])).catch(() => 0))
+    }
+    if (pdfMs < srcMs) aFaire.push(f)
+  }
+  files = aFaire
+}
+if (files.length === 0) {
+  console.log('rien à faire : tous les PDF sont à jour')
+  process.exit(0)
+}
 
 const browser = await chromium.launch()
 const page = await browser.newPage()

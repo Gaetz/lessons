@@ -100,8 +100,10 @@ du 07, ne l'ouvrir qu'après).
 - **Diapos, document, PDF avancent ensemble.** Toute modification de contenu
   dans les diapos se reporte dans le document `cours/*.md` correspondant, et
   les PDF se régénèrent dans la foulée (`node scripts/docs-pdf.mjs
-  Y1/01-code-et-pixels`, depuis la racine). Ne jamais laisser les trois
-  supports diverger.
+  Y1/01-code-et-pixels`, depuis la racine — incrémental : seuls les
+  documents plus récents que leur PDF sont refaits ; `--force` pour tout,
+  un préfixe comme `06` pour cibler). Ne jamais laisser les trois supports
+  diverger.
 
 - **La source de vérité du contenu est `public/ressources/`** (versionnée) —
   le dossier `~/Downloads/of_cours` d'origine est en retard sur elle.

@@ -158,7 +158,7 @@ breadcrumb: Installation / 3. Project Generator
 - **Project name** : le nom de votre projet
 - **Project path** : `C:\OF\apps\myApps` (le défaut)
 - **Platforms** : *Windows (Visual Studio)*
-- **Template** : sélectionner **`vs2026`** — vide, il génère pour VS 2022
+- **Template** : laisser **vide**
 - **Generate**, puis *Open in IDE*
 
 </v-clicks>
@@ -168,8 +168,8 @@ breadcrumb: Installation / 3. Project Generator
 ::right::
 
 <div>
-<ZoomImage src="/install/project-generator.png" alt="Project Generator : plateforme Windows Visual Studio et template vs2026" class="h-95 object-contain mx-auto" />
-<p class="mt-2 text-xs op-60">Le réglage qui compte pour nous : Template = vs2026.</p>
+<ZoomImage src="/install/project-generator.png" alt="Project Generator : nom du projet, chemin et plateforme Windows Visual Studio" class="h-95 object-contain mx-auto" />
+<p class="mt-2 text-xs op-60">Nom, chemin, plateforme — et le template reste vide.</p>
 </div>
 
 <!--

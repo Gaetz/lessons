@@ -1107,6 +1107,7 @@ breadcrumb: 1 — Les bases / Cours 01
 ```cpp
 	x = 0;
 	float step { 75 };
+	y = sizeY * 1 / 4.0f;
 	ofDrawCircle(x, y, 37.5f);
 	x = x + step;
 	ofDrawCircle(x, y, 37.5f);

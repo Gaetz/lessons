@@ -56,10 +56,10 @@ C:\OF\
 2. **Project name** : le nom de ton projet.
 3. **Project path** : `C:\OF\apps\myApps` (le défaut).
 4. **Platforms** : *Windows (Visual Studio)*.
-5. **Template** : sélectionne **`vs2026`** — laissé vide, il génère pour VS 2022.
+5. **Template** : laisse-le **vide**.
 6. **Generate**, puis *Open in IDE*.
 
-![Le Project Generator : plateforme Windows Visual Studio et template vs2026](img/install-project-generator.png)
+![Le Project Generator : nom du projet, chemin, plateforme Windows Visual Studio, template vide](img/install-project-generator.png)
 
 Le Project Generator crée le dossier du projet avec le `.sln`, `src/` (`main.cpp`, `ofApp.h`, `ofApp.cpp`) et `bin/`. C'est lui aussi qui ajoutera les *addons* plus tard dans l'année.
 
