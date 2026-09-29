@@ -376,19 +376,19 @@ def img_trainee():
     W, H = 960, 380
     im = Image.new('RGB', (W, H), FOND)
     d = ImageDraw.Draw(im)
-    d.text((250, 26), 'sans ofBackground', font=font(19, bold=True), fill=ORANGE, anchor='ma')
-    d.text((710, 26), 'avec ofBackground en tete de draw()', font=font(19, bold=True), fill=BLEU, anchor='ma')
+    d.text((250, 26), 'par defaut : efface a chaque frame', font=font(19, bold=True), fill=BLEU, anchor='ma')
+    d.text((710, 26), 'l\'accumulation, elle, se construit', font=font(19, bold=True), fill=ORANGE, anchor='ma')
     d.rectangle([70, 70, 430, 330], outline=ENCRE, width=3, fill=(40, 40, 40))
     d.rectangle([530, 70, 890, 330], outline=ENCRE, width=3, fill=(40, 40, 40))
-    # traînée de cercles fantômes
+    # un seul cercle net : openFrameworks efface tout seul
+    d.ellipse([300 - 30, 130 - 30, 300 + 30, 130 + 30], fill=(245, 245, 245))
+    # la traînée : l'effet voulu, fabriqué avec un ofFbo (cours 18)
     for k in range(5):
         g = 70 + k * 45
-        x, y = 130 + k * 55, 260 - k * 38
+        x, y = 590 + k * 55, 260 - k * 38
         d.ellipse([x - 30, y - 30, x + 30, y + 30], fill=(g, g, g))
-    # un seul cercle propre
-    d.ellipse([760 - 30, 130 - 30, 760 + 30, 130 + 30], fill=(245, 245, 245))
-    d.text((250, 344), 'les frames s\'accumulent : la trainee', font=font(15), fill=GRIS, anchor='ma')
-    d.text((710, 344), 'chaque frame repart d\'un fond propre', font=font(15), fill=GRIS, anchor='ma')
+    d.text((250, 344), 'ofBackground choisit juste la couleur du fond', font=font(15), fill=GRIS, anchor='ma')
+    d.text((710, 344), 'une toile qui garde tout : ofFbo, cours 18', font=font(15), fill=GRIS, anchor='ma')
     im.save(os.path.join(OUT, '05-trainee.png')); print('ok 05-trainee.png')
 
 

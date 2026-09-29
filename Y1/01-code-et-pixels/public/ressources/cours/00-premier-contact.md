@@ -265,7 +265,7 @@ La tête **suit la souris**. `mouseX` et `mouseY` sont deux variables que le pro
 
 ## 8. Étape 7 — le fond
 
-Un détail cloche : quand la tête bouge, l'ancienne position reste affichée — ça fait des traînées. Il faut **repeindre le fond** à chaque image, en première ligne de `draw()` :
+Dernière touche : le fond. Jusqu'ici il est gris — openFrameworks **efface la fenêtre à chaque image**, tout seul, avec sa couleur de fond par défaut. `ofBackground` permet de **choisir** cette couleur ; on l'écrit en première ligne de `draw()`, avant le dessin :
 
 ```cpp
 void ofApp::draw() {

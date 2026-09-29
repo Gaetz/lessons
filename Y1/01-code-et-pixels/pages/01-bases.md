@@ -535,8 +535,8 @@ void ofApp::draw() {
 
 <v-clicks>
 
-- Sans lui : les anciennes positions restent affichées — des **traînées**
-- `ofBackground` repeint toute la fenêtre, en **première ligne** de `draw()` : chaque image repart d'un fond propre
+- Jusqu'ici le fond était gris : openFrameworks **efface la fenêtre à chaque image**, tout seul, avec sa couleur par défaut
+- `ofBackground` **choisit** cette couleur — en première ligne de `draw()`, avant le dessin
 - Un nombre = un gris (0 noir, 255 blanc) ; trois nombres = une couleur
 
 </v-clicks>
@@ -544,8 +544,9 @@ void ofApp::draw() {
 </div>
 
 <!--
-Montrer d'abord SANS ofBackground : le bug motive la solution. Essaie : un
-fond de couleur ; un fond blanc — que deviennent les yeux semi-transparents ?
+Sans ofBackground : pas de traînées, le fond reste gris — openFrameworks
+efface tout seul. Essaie : un fond de couleur ; un fond blanc — que
+deviennent les yeux semi-transparents ?
 -->
 
 ---
@@ -693,7 +694,7 @@ void ofApp::setup() {
 <v-clicks>
 
 - L'emballage minimal du cours 00 dans le `.h`, `update` et `draw` vides — une fenêtre gris clair
-- Le fond est dans `setup()` cette fois : ce dessin **ne bouge pas**, le peindre une fois suffit — dès que ça bougera (cours 05), il redescendra dans `draw()`
+- Le fond est dans `setup()` cette fois : poser la couleur une fois suffit, openFrameworks s'en sert ensuite à chaque image — dès le cours 05, on l'écrira en tête de `draw()`, la convention
 
 </v-clicks>
 
@@ -2212,7 +2213,7 @@ layout: split
 breadcrumb: 1 — Les bases / Cours 05
 ---
 
-# Étape 3 — effacer avant de redessiner
+# Étape 3 — le fond : qui efface, et où
 
 ```cpp
 	ofBackground(255, 0, 0);     // en PREMIÈRE ligne de draw()
@@ -2222,10 +2223,10 @@ breadcrumb: 1 — Les bases / Cours 05
 
 <v-clicks>
 
-- Enlève cette ligne et bouge la souris : les cercles s'accumulent en **traînée**
-- `ofBackground` en début de `draw()` efface la frame précédente — un fond propre à chaque image
-- La traînée est parfois ce qu'on **veut** (le cours 18 peindra avec) : un choix, pas un accident
-- Au cours 01 il était dans `setup()` — **dès que ça bouge, il va dans `draw()`**
+- Enlève cette ligne et bouge la souris : **surprise, pas de traînée** — le fond redevient gris, le cercle reste net
+- openFrameworks **efface la fenêtre à chaque frame**, tout seul, avec la dernière couleur de fond connue
+- La ligne sert à **choisir** la couleur, et à rendre l'ordre explicite : fond d'abord, formes ensuite — la convention openFrameworks
+- Une **vraie** traînée ne se supprime pas, elle se **construit** : `ofFbo`, cours 18
 
 </v-clicks>
 
@@ -2314,16 +2315,6 @@ breadcrumb: 1 — Les bases / Cours 05
 
 **3 · Le kaléidoscope** — quatre cercles à la fois : la souris, son symétrique horizontal, son symétrique vertical, et le symétrique des deux. Bouge la souris : les quatre dansent ensemble.
 
-</div>
-
-<div v-click class="mt-5 text-base">
-
-**4 ·** 🔥 **Le pinceau** — enlève `ofBackground`, et fais de la traînée un outil : le cercle suit la souris, et son rayon vaut `mouseY / 10.0f` — plus la souris est basse, plus le trait est épais. Tu viens d'écrire ton premier logiciel de dessin.
-
-</div>
-
-<div v-click class="mt-6 text-sm op-75">
-<b>🔥</b> = exercice avancé.
 </div>
 
 <p class="ndp-credit">📄 <a href="/ressources/cours/pdf/05-cycle-souris.pdf" download>cours complet (PDF)</a> · <a href="/ressources/cours/05-cycle-souris.md" download>md</a> · <a href="/ressources/ofApp05.h" download>ofApp05.h</a> · <a href="/ressources/ofApp05.cpp" download>ofApp05.cpp</a></p>

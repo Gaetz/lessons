@@ -65,15 +65,15 @@ Regarde le trajet de `x` : **écrite** dans `update()`, **lue** dans `draw()`. D
 
 > **Essaie** : le cercle ne suit que l'horizontale (`y` fixé à 200). Puis ajoute une variable partagée `float rayon` calculée dans `update()` : `rayon = mouseX / 4.0f;` — le cercle grossit vers la droite.
 
-## 3. Étape 3 — effacer avant de redessiner
+## 3. Étape 3 — le fond : qui efface, et où
 
-Fais l'expérience : **enlève** la ligne `ofBackground(255, 0, 0);` et bouge la souris. Les cercles s'accumulent en traînée — chaque frame dessine par-dessus les précédentes.
+Fais l'expérience : **enlève** la ligne `ofBackground(255, 0, 0);` et bouge la souris. Surprise : pas de traînée — le fond redevient gris et le cercle reste net. C'est qu'openFrameworks **efface la fenêtre à chaque frame**, tout seul, avec la dernière couleur de fond connue (gris par défaut).
 
-`ofBackground` peint toute la fenêtre : placé au **début** de `draw()`, il efface la frame précédente et on repart d'un fond propre. La traînée est parfois ce qu'on veut (le cours 18 s'en servira pour peindre), mais c'est un choix, pas un accident.
+À quoi sert la ligne, alors ? À **choisir** la couleur d'effacement, et à rendre l'ordre du dessin explicite : le fond d'abord, les formes ensuite. C'est la convention openFrameworks — au cours 01 on posait la couleur une fois dans `setup()`, désormais on l'écrit en tête de `draw()`.
 
-![Sans ofBackground les frames s'accumulent en traînée ; avec, chaque frame repart d'un fond propre](img/05-trainee.png)
+![Par défaut, chaque frame repart d'un fond propre ; l'accumulation se construira exprès au cours 18](img/05-trainee.png)
 
-Au cours 01, `ofBackground` était dans `setup()` — ça marchait parce que rien ne bougeait. **Dès que quelque chose bouge, il va dans `draw()`.**
+Et si on **veut** une traînée — des formes qui s'accumulent ? Ça ne s'obtient pas en supprimant une ligne : c'est un effet qui se **construit**, avec une toile qui garde ce qu'on y dessine (`ofFbo`, cours 18 — c'est ainsi que le projet final peindra).
 
 > **Essaie** : remets `ofBackground`, mais à la **fin** de `draw()`. Tout disparaît — pourquoi ? (L'ordre des lignes DANS `draw()` compte : on a peint le fond par-dessus le cercle.)
 
@@ -107,12 +107,10 @@ Tu peux maintenant relire `ofApp00a.cpp` et tout nommer :
 
 3. **Le kaléidoscope** — quatre cercles à la fois : la souris, son symétrique horizontal, son symétrique vertical, et le symétrique des deux. Bouge la souris : les quatre dansent ensemble.
 
-4. **Le pinceau** *(plus costaud)* — enlève `ofBackground`, et fais de la traînée un outil : le cercle suit la souris, et son rayon vaut `mouseY / 10.0f` — plus la souris est basse, plus le trait est épais. Tu viens d'écrire ton premier logiciel de dessin.
-
 ## Ce qu'il faut retenir
 
 - Le cycle : `setup()` une fois, puis `update()` (calculer) et `draw()` (dessiner), 60 fois par seconde.
 - La règle d'organisation : les calculs dans `update()`, le dessin dans `draw()` — pour savoir où chercher les erreurs.
 - Une variable du `.h` est partagée entre les blocs **et** persistante d'une frame à l'autre.
 - `mouseX`, `mouseY` : la position de la souris, mise à jour toute seule.
-- `ofBackground` en début de `draw()` efface la frame précédente. L'enlever = traînée, un choix à faire exprès.
+- openFrameworks efface la fenêtre à chaque frame ; `ofBackground` en tête de `draw()` **choisit** la couleur du fond — et l'ordre dans `draw()` compte. L'accumulation volontaire attendra l'`ofFbo` (cours 18).

@@ -33,7 +33,7 @@ void ofApp::draw() {
 Une fenêtre gris clair de 400 × 400. Deux remarques :
 
 - `ofBackground(200)` avec **un seul nombre** donne un gris : c'est un raccourci pour `(200, 200, 200)`.
-- Il est dans `setup()`, pas dans `draw()` comme au cours 00 : le dessin de ce cours **ne bouge pas**, peindre le fond une fois suffit. Dès que quelque chose bougera (cours 05), il redescendra dans `draw()`.
+- Il est dans `setup()`, pas dans `draw()` comme au cours 00 : poser la couleur une fois suffit, openFrameworks s'en sert ensuite à chaque image. (Dès le cours 05, on reprendra l'habitude de l'écrire en tête de `draw()` — la convention openFrameworks.)
 
 > **Essaie** : `ofBackground(255)`, puis `ofBackground(0)`, puis un fond de couleur à trois nombres.
 
