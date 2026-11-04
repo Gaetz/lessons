@@ -51,7 +51,13 @@ Tant que les trois tables sont identiques, on règle le contraste ou la luminosi
 
 La courbe en S est la « smoothstep », `t * t * (3 - 2 * t)` : elle vaut 0 en 0, 1 en 1, et sa pente est nulle aux deux bouts, ce qui écrase doucement les extrêmes. On la retrouve partout en animation.
 
+![Contraste, teal & orange, vintage : moitié gauche d'origine, moitié droite étalonnée](img/11c-avant-apres.png)
+
 Les trois courbes s'affichent en haut à droite de la fenêtre, tracées comme au cours 11b. Le look, c'est la forme de ces trois courbes. Un étalonneur de cinéma passe sa journée à les déplacer.
+
+Une LUT ne sait rien de l'image qu'elle traite : elle répond seulement « telle valeur d'entrée devient telle valeur de sortie ». Le même look donne donc la même couleur sur n'importe quelle image, c'est ce qui permet de le partager entre tous les plans d'un film ou toutes les scènes d'un jeu. C'est aussi sa limite : un dessin à fond blanc reçoit le même traitement qu'une photo d'ombres.
+
+![Le look teal & orange appliqué à trois images différentes](img/11c-meme-look.png)
 
 ## 4. La force du grading
 
@@ -60,6 +66,8 @@ lutR[i] = ofClamp((t + (r - t) * force) * 255, 0, 255);
 ```
 
 Plutôt qu'appliquer un look à fond ou pas du tout, on **interpole** entre l'identité `t` et le look `r` : c'est `getLerped` du cours 09, appliqué à une valeur. `force = 0` donne l'image d'origine, `force = 1` le look complet, `force = 0.5` la moitié. La souris règle ça. Tous les logiciels d'étalonnage ont ce curseur d'intensité, et il est fait exactement comme ça.
+
+![Le look teal & orange à force 0, 0,5 et 1](img/11c-force.png)
 
 ## 5. Ce qu'une LUT 1D ne peut pas faire
 

@@ -616,6 +616,63 @@ négatif est le look n°4 pour le prouver.
 -->
 
 ---
+layout: default
+breadcrumb: 7 — La couleur avancée / 11c LUT
+---
+
+# Trois looks, avant / après
+
+<div>
+<ZoomImage src="/ressources/cours/img/11c-avant-apres.png" alt="Contraste, teal & orange, vintage : moitié gauche d'origine, moitié droite étalonnée" class="w-full object-contain" />
+</div>
+
+<div class="mt-3 text-sm">
+
+<v-clicks>
+
+- **Contraste** : la même courbe en S sur les trois canaux — les extrêmes écrasés, le milieu étiré. Tant que les trois tables sont identiques, on ne colore pas
+- **Teal & orange** : plus de rouge dans les tons moyens et clairs, plus de bleu dans les sombres — peaux orangées, ombres bleu-vert, le look des films d'action
+- **Vintage** : noirs relevés à 12 %, blancs plafonnés à 92 %, un voile chaud — l'image ne descend plus jusqu'au noir
+
+</v-clicks>
+
+</div>
+
+<!--
+Faire chercher la frontière avant/après sur chaque panneau : où l'œil
+la voit-il le plus vite ? (Les ombres pour le vintage, la fourrure pour le
+teal & orange.) Un étalonneur travaille exactement ces trois leviers.
+-->
+
+---
+layout: default
+breadcrumb: 7 — La couleur avancée / 11c LUT
+---
+
+# Une LUT ne connaît pas l'image
+
+<div>
+<ZoomImage src="/ressources/cours/img/11c-meme-look.png" alt="Le look teal & orange appliqué à trois photos différentes" class="w-full object-contain" />
+</div>
+
+<div class="mt-3 text-sm">
+
+<v-clicks>
+
+- La même table teal & orange, trois images : le look est le même partout, parce que la LUT ne sait **rien** de l'image — elle répond seulement « telle valeur d'entrée devient telle valeur de sortie »
+- C'est pour ça qu'un look se **partage** : un fichier de tables, et tout un film, ou tout un jeu, prend la même couleur
+- Et c'est sa limite : un dessin à fond blanc et une photo d'ombres reçoivent **le même** traitement, même si l'un n'en avait pas besoin
+
+</v-clicks>
+
+</div>
+
+<!--
+Le fichier .cube des logiciels d'étalonnage (section 5 du document) n'est
+que ça : des tables, sans image. Un moteur de jeu le charge en post-process.
+-->
+
+---
 layout: split
 breadcrumb: 7 — La couleur avancée / 11c LUT
 ---
@@ -737,7 +794,36 @@ breadcrumb: 7 — La couleur avancée / 11c LUT
 
 <!--
 La souris règle la force (update). Vintage : les noirs ne sont plus noirs,
-voile chaud.
+voile chaud. La diapo suivante montre la force sur le teal & orange.
+-->
+
+---
+layout: default
+breadcrumb: 7 — La couleur avancée / 11c LUT
+---
+
+# La force : 0, 0,5, 1
+
+<div>
+<ZoomImage src="/ressources/cours/img/11c-force.png" alt="Le look teal & orange à force 0, 0,5 et 1" class="w-full object-contain" />
+</div>
+
+<div class="mt-3 text-sm">
+
+<v-clicks>
+
+- À gauche l'identité, à droite le look complet, au milieu **la moitié du chemin** : chaque case de la table est interpolée entre les deux
+- Un look est rarement appliqué « à fond » : le curseur permet de **doser** — et de comparer en un geste avec l'image d'origine
+- Avec la souris, le passage est continu : c'est l'`update()` de l'étape suivante
+
+</v-clicks>
+
+</div>
+
+<!--
+Essaie : force négative (−0,5) ou supérieure à 1 (1,5) — l'interpolation
+extrapole, et ofClamp retient la table dans 0-255. Que fait le look « en
+négatif » ?
 -->
 
 ---

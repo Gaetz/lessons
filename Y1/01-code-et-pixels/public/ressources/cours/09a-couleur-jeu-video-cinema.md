@@ -17,9 +17,13 @@ Mais un écran ne peut afficher que de 0 (noir) à 1 (son blanc maximum). Il fau
 
 Une fois la lumière ramenée entre 0 et 1, on la stocke sur 8 bits, 256 valeurs par canal. Si ces 256 valeurs étaient réparties régulièrement en lumière, on gâcherait des niveaux dans les clairs, où l'œil ne distingue rien, et on en manquerait dans les sombres, où il distingue tout. On les répartit donc selon une courbe, dite **gamma** ou **sRGB**, qui donne plus de niveaux aux sombres. Conséquence : la valeur 128 ne représente pas la moitié de la lumière, mais environ 22 %.
 
+![Un dégradé de valeurs 0 à 255 et un dégradé de lumière 0 à 100 % : le milieu n'est pas au même endroit](img/11a-degrades.png)
+
 Tant qu'on ne fait qu'afficher, on ne s'en aperçoit pas. Dès qu'on **calcule** sur ces valeurs, moyenne, flou, dégradé, transparence, le résultat est faux : trop sombre. La solution est de revenir en lumière linéaire pour calculer, puis de réencoder. C'est la leçon **11a**, la plus importante de la série, et la raison du réglage « Linear / Gamma » de tous les moteurs.
 
 Avant l'encodage, on ajuste souvent le rendu par un **étalonnage** : contraste, ambiance chaude ou froide, look cinéma. L'outil universel pour ça est la **LUT**, une table qui dit pour chaque valeur d'entrée quelle valeur de sortie produire. Leçon **11c**.
+
+![Trois looks d'étalonnage : moitié gauche d'origine, moitié droite étalonnée](img/11c-avant-apres.png)
 
 ### Profondeur de bits et banding
 

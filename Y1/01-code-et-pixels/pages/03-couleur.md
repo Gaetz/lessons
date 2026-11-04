@@ -397,28 +397,38 @@ label des téléviseurs (10 bits, plus loin). Les distinguer.
 -->
 
 ---
-layout: default
+layout: split
 breadcrumb: 3 — La couleur / Cours 09a
 ---
 
 # Au milieu : le codage
 
-<div class="mt-4 text-base">
+<div class="text-sm">
 
 <v-clicks>
 
 - Lumière ramenée entre 0 et 1, puis stockée sur 8 bits : **256 valeurs par canal**
-- Réparties régulièrement en lumière, on gâcherait des niveaux dans les clairs (où l'œil ne distingue rien) et on en manquerait dans les sombres (où il distingue tout)
-- D'où une courbe, dite **gamma** ou **sRGB**, qui donne plus de niveaux aux sombres : la valeur 128 n'est pas la moitié de la lumière, mais environ 22 %
-- Afficher : on ne s'en aperçoit pas. **Calculer** dessus — moyenne, flou, dégradé, transparence — : résultat faux, trop sombre. Revenir en linéaire pour calculer, réencoder ensuite *(→ 11a, la plus importante de la série ; le réglage « Linear / Gamma » des moteurs)*
+- Réparties régulièrement en lumière, on gâcherait des niveaux dans les clairs et on en manquerait dans les sombres, où l'œil distingue tout
+- D'où la courbe **gamma** ou **sRGB** : la valeur 128 n'est pas la moitié de la lumière, mais environ 22 %. Afficher, ça ne se voit pas ; **calculer** dessus — flou, dégradé, transparence — donne un résultat trop sombre *(→ 11a)*
 - Avant l'encodage, l'**étalonnage** : contraste, ambiance, look cinéma — par une **LUT**, une table entrée → sortie *(→ 11c)*
 
 </v-clicks>
 
 </div>
 
+::right::
+
+<div class="flex flex-col gap-3">
+<ZoomImage src="/ressources/cours/img/11a-degrades.png" alt="Un dégradé de valeurs 0 à 255 et un dégradé de lumière 0 à 100 % : le milieu n'est pas au même endroit" class="w-full object-contain" />
+<ZoomImage src="/ressources/cours/img/11c-avant-apres.png" alt="Trois looks d'étalonnage, avant et après" class="w-full object-contain" />
+</div>
+
 <!--
-Le 22 % vient du document (courbe sRGB) ; la leçon 11a le fera calculer.
+En haut, les deux dégradés du 11a : même noir, même blanc, mais le milieu
+de la lumière est à la valeur 186 — le 22 % du document. En bas, trois
+looks du 11c : l'étalonnage est une courbe par canal. Revenir en linéaire
+pour calculer, réencoder ensuite : c'est le réglage « Linear / Gamma » des
+moteurs.
 -->
 
 ---

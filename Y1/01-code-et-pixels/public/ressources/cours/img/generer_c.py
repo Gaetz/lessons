@@ -154,6 +154,38 @@ def img11c():
         items.append((lab, im))
     save(sheet(items, 2, 0.48), '11c-looks.png')
 
+    # exemples : avant / après pour chaque look (moitié gauche d'origine, moitié droite étalonnée)
+    def lut_u8(r, g, b): return [np.clip(v * 255, 0, 255).astype(np.uint8) for v in (r, g, b)]
+    def applique(arr_u8, lr, lg, lb): return np.stack([lr[arr_u8[..., 0]], lg[arr_u8[..., 1]], lb[arr_u8[..., 2]]], -1)
+    def avant_apres(im_src, lr, lg, lb, lab):
+        a = np.array(im_src).astype(np.uint8); out = applique(a, lr, lg, lb); h, w = a.shape[:2]
+        out[:, :w // 2] = a[:, :w // 2]; im = to_img(out); d = ImageDraw.Draw(im)
+        d.line([w // 2, 0, w // 2, h], fill=(255, 255, 255), width=3)
+        for x, t in [(w // 4, 'avant'), (3 * w // 4, 'apres : ' + lab)]:
+            tw = d.textlength(t, font=font(15)); d.rectangle([x - tw / 2 - 8, h - 34, x + tw / 2 + 8, h - 8], fill=(0, 0, 0))
+            d.text((x, h - 21), t, fill=(255, 255, 255), font=font(15), anchor='mm')
+        return im
+    exemples = [(lab, avant_apres(src_img, *lut_u8(*looks[lab]), lab)) for lab in ('contraste (courbe en S)', 'teal & orange', 'vintage')]
+    save(sheet(exemples, 3, 0.42), '11c-avant-apres.png')
+
+    # la force du grading : interpolation entre l'identité et le look teal & orange
+    r2, g2, b2 = looks['teal & orange']; forces = []
+    for f in (0.0, 0.5, 1.0):
+        lr, lg, lb = lut_u8(t + (r2 - t) * f, t + (g2 - t) * f, t + (b2 - t) * f)
+        forces.append(('force %.1f' % f + (' : image d origine' if f == 0 else ' : look complet' if f == 1 else ' : a moitie'), to_img(applique(src.astype(np.uint8), lr, lg, lb))))
+    save(sheet(forces, 3, 0.42), '11c-force.png')
+
+    # le même look sur trois images : la LUT ne connaît pas l'image
+    lr, lg, lb = lut_u8(*looks['teal & orange']); trois = []
+    for name in ('pandaroux.jpg', 'redpanda.jpg', 'chibi-redpanda.jpg'):
+        im = Image.open(os.path.join(DATA, name)).convert('RGB'); im = im.resize((int(im.width * H / im.height), H), Image.LANCZOS)
+        trois.append((name, to_img(applique(np.array(im).astype(np.uint8), lr, lg, lb))))
+    tw = int(0.42 * W); th = int(0.42 * H); widths = [int(im.width * th / im.height) for _, im in trois]
+    out = Image.new('RGB', (sum(widths) + 8 * (len(trois) + 1), th + 26 + 16), PAPER); d = ImageDraw.Draw(out); x = 8
+    for (lab, im), w2 in zip(trois, widths):
+        out.paste(im.resize((w2, th), Image.LANCZOS), (x, 8)); d.text((x + w2 / 2, th + 8 + 13), lab, fill=INK, font=font(13), anchor='mm'); x += w2 + 8
+    save(out, '11c-meme-look.png')
+
     out = Image.new('RGB', (720, 200), PAPER); d = ImageDraw.Draw(out)
     d.text((20, 20), 'Une LUT 1D = une table de 256 cases. L entree est l INDICE, la sortie est le CONTENU.', fill=INK, font=font(13))
     vals = [int(sS(i / 255) * 255) for i in range(256)]; shown = [0, 1, 2, '...', 100, 101, 102, '...', 253, 254, 255]
