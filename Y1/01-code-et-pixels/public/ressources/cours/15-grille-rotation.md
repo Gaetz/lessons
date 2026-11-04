@@ -87,7 +87,7 @@ Une seule ligne au début de `drawPoint` (avec `float angleOffset { 0.2f };` dan
 
 Et la vague apparaît. Si toutes les cases ont le même angle, tout tourne en bloc ; en ajoutant un décalage **qui dépend de la position de la case**, les voisines sont légèrement en avance ou en retard — et l'œil voit une onde traverser la grille.
 
-C'est l'idée de la traînée du cours 08, généralisée : **une grandeur commune à tous, plus un décalage propre à chacun**. La grandeur commune est `globalAngle` (le temps) ; le décalage propre est `i * angleOffset + j * angleOffset` (la position).
+C'est l'idée de la traînée évoluée du cours 07, généralisée : **une grandeur commune à tous, plus un décalage propre à chacun**. La grandeur commune est `globalAngle` (le temps) ; le décalage propre est `i * angleOffset + j * angleOffset` (la position).
 
 > **Essaie** : `angleOffset` à 0.1, 0.5, 1, puis 75. À 75 radians par case, le mouvement **semble** aléatoire alors qu'il est parfaitement régulier — le tour fait 6.28, et 75 retombe « n'importe où » sur le cercle à chaque case. Puis fais dépendre le déphasage de `i` **seulement** : les colonnes ondulent ensemble.
 

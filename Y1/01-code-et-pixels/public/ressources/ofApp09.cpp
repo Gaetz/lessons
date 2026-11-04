@@ -51,7 +51,7 @@ void ofApp::draw() {
 	ofDrawBitmapString("saturation (S)", 10, 68);
 	ofDrawBitmapString("luminosite (B)", 10, 118);
 
-	// ---- 2. Animer une couleur : la méthode de 08 contre HSB ----
+	// ---- 2. Animer une couleur : les cosinus de 07 contre HSB ----
 	// En 08, trois cosinus déphasés sur r, g, b : ça bouge, mais on ne contrôle rien
 	// (la couleur passe par des gris, des teintes sales, on ne sait pas laquelle vient après).
 	float r = (cos(t * 1.2f) / 2 + 0.5f) * 255;
@@ -77,7 +77,7 @@ void ofApp::draw() {
 		ofDrawLine(x, 200, x, 320);
 	}
 
-	// ---- 4. Teinte selon l'indice : la traînée de 08 avec une seule ligne de couleur ----
+	// ---- 4. Teinte selon l'indice : la traînée évoluée de 07 avec une seule ligne de couleur ----
 	// 25 éléments x 10 = 250 : la traînée parcourt presque toute la roue
 	for (int i = 0; i < prevX.size(); i++) {
 		ofSetColor(ofColor::fromHsb(i * 10, 255, 255));
@@ -92,7 +92,7 @@ void ofApp::draw() {
 	// comme la distance entre deux points : Pythagore en 3D. On s'en servira en 12.
 
 	// Exercices :
-	// - reprendre le rendu de 08 et remplacer les trois cosinus par une teinte qui avance
+	// - reprendre la traînée évoluée de 07 et remplacer les trois cosinus par une teinte qui avance
 	// - faire tourner la teinte de la traînée avec le temps (i * 10 + t * 40)
 	// - dégradé entre deux couleurs en passant par HSB (interpoler la teinte) : comparer avec getLerped
 }

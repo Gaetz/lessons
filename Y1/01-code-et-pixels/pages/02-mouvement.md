@@ -461,7 +461,7 @@ void ofApp::draw() {
 <v-clicks>
 
 - La boucle du cours 04 : l'indice 0 est le plus ancien, `size() - 1` le plus récent
-- Cinquante ours blancs identiques se fondent en une masse — **c'est exprès** : le cours 08 fait varier couleur, transparence et taille selon `i`
+- Cinquante ours blancs identiques se fondent en une masse — **c'est exprès** : la suite du cours fait varier couleur, transparence et taille selon `i`
 
 </v-clicks>
 
@@ -470,8 +470,8 @@ void ofApp::draw() {
 
 <!--
 IMPORTANT : ce cours porte la grande AUTONOMIE « traînée évoluée » (tableau de
-paramètres dans le document). Le cours 08 en est le corrigé : ne l'ouvrir
-qu'une fois sa version terminée.
+paramètres dans le document). La traînée évoluée (suite de ce bloc) en est
+le corrigé : ne l'ouvrir qu'une fois sa version terminée.
 -->
 
 ---
@@ -616,26 +616,26 @@ personnelle. N°3 : x - taille / 2, etc.
 
 ---
 layout: split
-breadcrumb: 2 — Le mouvement / Cours 08
+breadcrumb: 2 — Le mouvement / Cours 07
 ---
 
-# Cours 08 — Traînée évoluée
+# Cours 07 — La traînée évoluée
 
-Le **corrigé de l'autonomie** du cours 07 : chaque élément
+Le **corrigé de l'autonomie** : chaque élément
 a sa taille, sa transparence et sa teinte, calculées depuis
 son **indice** dans la file et le **temps**.
 
 <div class="mt-4 text-sm">
 
-Rien de nouveau dans les outils : c'est un cours sur ce
-qu'on peut faire quand on **combine** ceux qu'on a.
+Rien de nouveau dans les outils : une deuxième partie sur
+ce qu'on peut faire quand on **combine** ceux qu'on a.
 
 </div>
 
 ::right::
 
 <div>
-<ZoomImage src="/ressources/cours/img/08-trainee.png" alt="Traînée de cercles bleutés" class="w-full object-contain" />
+<ZoomImage src="/ressources/cours/img/07-trainee-evoluee.png" alt="Traînée de cercles bleutés" class="w-full object-contain" />
 </div>
 
 <!--
@@ -645,7 +645,7 @@ contraintes de l'autonomie est valable. Le dire explicitement.
 
 ---
 layout: default
-breadcrumb: 2 — Le mouvement / Cours 08
+breadcrumb: 2 — Le mouvement / Cours 07
 ---
 
 # Étape `forme()` — tout se déduit de `i` et `t`
@@ -684,7 +684,7 @@ les deux passes. Les 5.0f et 50.0f évitent la division entière (cours 01).
 
 ---
 layout: default
-breadcrumb: 2 — Le mouvement / Cours 08
+breadcrumb: 2 — Le mouvement / Cours 07
 ---
 
 # Étapes `update()` et `draw()` — le temps, la file, la boucle
@@ -696,7 +696,7 @@ void ofApp::update() {
     g = (cos(t * 1.0f)  / 2 + 0.5f) * 255;
     b = (cos(t * 0.86f) / 2 + 0.5f) * 255;
 
-    prevX.push_back(mouseX);                      // la file du cours 07 (bornée à 25)
+    prevX.push_back(mouseX);                      // la file de la première partie (bornée à 25)
     prevY.push_back(mouseY);
     if (prevX.size() > 25) { prevX.erase(prevX.begin()); prevY.erase(prevY.begin()); }
 }
@@ -724,7 +724,7 @@ taille, cercle si i pair / carré si impair (i % 2 == 0).
 -->
 ---
 layout: default
-breadcrumb: 2 — Le mouvement / Cours 08
+breadcrumb: 2 — Le mouvement / Cours 07
 ---
 
 # À vous — variations sur la traînée
@@ -745,10 +745,10 @@ breadcrumb: 2 — Le mouvement / Cours 08
 <b>🔥</b> = exercice avancé · le reste des exercices est dans le document.
 </div>
 
-<p class="ndp-credit">📄 <a href="/ressources/cours/pdf/08-trainee-evoluee.pdf" download>cours complet (PDF)</a> · <a href="/ressources/cours/08-trainee-evoluee.md" download>md</a> · <a href="/ressources/ofApp08.h" download>ofApp08.h</a> · <a href="/ressources/ofApp08.cpp" download>ofApp08.cpp</a></p>
+<p class="ndp-credit">📄 <a href="/ressources/cours/pdf/07-trainee.pdf" download>cours complet (PDF)</a> · <a href="/ressources/cours/07-trainee.md" download>md</a> · <a href="/ressources/ofApp07a.h" download>ofApp07a.h</a> · <a href="/ressources/ofApp07a.cpp" download>ofApp07a.cpp</a></p>
 
 <!--
-N°3 introduit % en douceur (il revient au cours 13). Le 08 est le corrigé
-de l'autonomie du 07 : ne l'ouvrir qu'après.
+N°3 introduit % en douceur (il revient au cours 13). La traînée évoluée est
+le corrigé de l'autonomie du 07 : ne l'ouvrir qu'après.
 -->
 

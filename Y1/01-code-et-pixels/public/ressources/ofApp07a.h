@@ -1,10 +1,11 @@
 #pragma once
 #include "ofMain.h"
 
-// 08 - Traînée évoluée : couleur, transparence, taille
+// 07a - Traînée évoluée : couleur, transparence, taille
+// État final du cours 07 (deuxième partie, corrigé de l'Autonomie)
 // Sketch d'origine : Cours 2024-2025/sketch_02_trail
 // Notions : paramètres multiples, dégradé de transparence selon l'indice,
-//           taille dépendant du temps et de l'indice, réutilisation de 07
+//           taille dépendant du temps et de l'indice, réutilisation de la première partie
 // Variante écartée : sketch_02a_blqck_trail (identique, fond blanc et soustraction des couleurs)
 
 class ofApp : public ofBaseApp {

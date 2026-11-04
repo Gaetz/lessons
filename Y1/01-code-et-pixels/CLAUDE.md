@@ -3,9 +3,11 @@
 ## Cadre
 
 Premier module de programmation de l'année : manipulation d'image et de
-couleur en C++ avec openFrameworks, pour débutants. 27 cours écrits
-(00-18, plus 09a et le bloc couleur avancée 11a-11g), un document markdown
-complet par cours, une paire `ofAppNN.h`/`ofAppNN.cpp` compilable par cours.
+couleur en C++ avec openFrameworks, pour débutants. 29 cours écrits
+(00-18 — le 08, introduction aux struct, est un cours console, comme
+06bis et 06ter —, plus 09a et le bloc couleur avancée 11a-11g), un document markdown complet par cours, une paire
+`ofAppNN.h`/`ofAppNN.cpp` compilable par cours à code openFrameworks
+(deux paires pour les cours 00 et 07 : ofApp00/00a, ofApp07/07a).
 
 La présentation est le **squelette des séances** ; le document de cours est
 la référence que les étudiants lisent et téléchargent. Ne pas dupliquer le
@@ -17,7 +19,7 @@ document dans les diapos : condenser, renvoyer au document.
     pages/00-module.md      intro du module (contrat, méthode, carte du semestre)
     pages/00a-installation.md  préliminaire : VS 2026 + openFrameworks sur Windows
     pages/01-bases.md       bloc 1 : cours 00-05
-    pages/02-mouvement.md   bloc 2 : cours 06-08
+    pages/02-mouvement.md   bloc 2 : cours 06-07
     pages/03-couleur.md     bloc 3 : cours 09, 09a
     pages/04-pixels.md      bloc 4 : cours 10, 11
     pages/05-geometrie.md   bloc 5 : cours 12-16
@@ -83,8 +85,9 @@ AVANT la fonction filtre, « la machine d'abord, la recette après ») :
    `ndp-credit` : cours complet + ofAppNN.h + ofAppNN.cpp (+ data si besoin).
 
 Les notes orateur portent le fil de séance et les renvois aux exercices du
-document (dont les « Autonomie » des cours 03 et 07 — le 08 est le corrigé
-du 07, ne l'ouvrir qu'après).
+document (dont les « Autonomie » des cours 03 et 07 — la deuxième partie
+du 07, la traînée évoluée, est le corrigé de son Autonomie : ne l'ouvrir
+qu'après).
 
 ## Commandes
 

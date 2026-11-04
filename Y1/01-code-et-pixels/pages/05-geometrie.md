@@ -157,7 +157,7 @@ respirent ensemble. Placer un point « à tel angle,
 
 - Les angles sont en **radians** : un tour = `TWO_PI` ≈ 6,28
 - Répartir `n` éléments sur un tour : `i * TWO_PI / n`
-- Le même `cos` que le cours 08 : quand l'angle avance, le point tourne, et sa coordonnée `x` oscille
+- Le même `cos` que le cours 07 : quand l'angle avance, le point tourne, et sa coordonnée `x` oscille
 
 </v-clicks>
 
@@ -412,7 +412,7 @@ l'ensemble ondule comme un drapeau.
 
 Le motif à retenir : **une grandeur commune à tous,
 plus un décalage propre à chacun** — la traînée du
-cours 08 le faisait déjà avec la taille.
+cours 07 le faisait déjà avec la taille.
 
 </div>
 

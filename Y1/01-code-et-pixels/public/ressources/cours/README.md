@@ -13,9 +13,9 @@ Un document par leçon, pour des débutants qui découvrent le C++ avec openFram
 | 05 | [Cycle et souris](05-cycle-souris.md) | ofApp05 | `setup` / `update` / `draw`, variables partagées |
 | 06 | [Animation](06-animation.md) | ofApp06 | vitesse, `dt`, `if`, rebond |
 | 06 bis | [Vérité, conditions et boucle de jeu](06bis-AddonConditions.md) | programmes console | `bool`, `else`, `switch`, `while`/`do`, `&&` `\|\|` `!`, `rand`, boucle de jeu |
-| 06 ter | [Boucles `for`, chaînes et tableaux](06ter-AddonFor.md) | programmes console | variantes du `for`, objets, fonctions membres de `string`, tableaux 1D/2D, `enum` |
-| 07 | [Traînée](07-trainee.md) | ofApp07 | fonctions, file bornée, `struct` |
-| 08 | [Traînée évoluée](08-trainee-evoluee.md) | ofApp08 | grandeurs selon l'indice et le temps |
+| 06 ter | [Boucles `for`, chaînes et listes](06ter-AddonFor.md) | programmes console | variantes du `for`, objets, fonctions membres de `string`, `vector` initialisés et listes de listes, `enum` |
+| 07 | [Traînée](07-trainee.md) | ofApp07 puis ofApp07a | fonctions, file bornée, `struct`, grandeurs selon l'indice et le temps |
+| 08 | [Les `struct`](08-structs.md) | programmes console | `struct`, fiches imbriquées, un fichier par struct, fonctions membres |
 | 09 | [Couleur](09-couleur.md) | ofApp09 | RGB, HSB, `ofColor`, dégradés |
 | 09a | [La couleur dans le jeu vidéo et le cinéma](09a-couleur-jeu-video-cinema.md) | sans code | pipeline, gamut, écrans, banding |
 | 10 | [Image et pixel](10-image-pixel.md) | ofApp10 | `ofImage`, `getColor`, `ofClamp`, `bool` |

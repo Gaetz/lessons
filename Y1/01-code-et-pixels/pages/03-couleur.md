@@ -39,8 +39,8 @@ que **nous** pensons la couleur.
 
 <!--
 « La même couleur, un peu plus claire » ne se calcule pas dans le cube —
-c'est pour ça que le cours 08 bricolait trois cosinus. En HSB : luminosité +1.
-Dans ce cours, update() reprend la file de 07/08 (25 positions de souris) —
+c'est pour ça que le cours 07 bricolait trois cosinus. En HSB : luminosité +1.
+Dans ce cours, update() reprend la file du 07 (25 positions de souris) —
 rien de neuf de ce côté.
 -->
 
@@ -90,10 +90,10 @@ layout: default
 breadcrumb: 3 — La couleur / Cours 09
 ---
 
-# Étape `draw()` (2/3) — animer une couleur : 08 contre HSB
+# Étape `draw()` (2/3) — animer une couleur : cosinus contre HSB
 
 ```cpp
-// la méthode du cours 08 : trois cosinus déphasés
+// la méthode du cours 07 : trois cosinus déphasés
 float r = (cos(t * 1.2f)  / 2 + 0.5f) * 255;
 float g = (cos(t * 1.0f)  / 2 + 0.5f) * 255;
 float b = (cos(t * 0.86f) / 2 + 0.5f) * 255;
@@ -140,7 +140,7 @@ for (int x = 520; x < 780; x++) {
     ofDrawLine(x, 200, x, 320);
 }
 
-// la traînée de 08, en UNE ligne de couleur
+// la traînée évoluée du 07, en UNE ligne de couleur
 for (int i = 0; i < prevX.size(); i++) {
     ofSetColor(ofColor::fromHsb(i * 10, 255, 255));
     ofDrawCircle(prevX[i], prevY[i], 5 + i);
@@ -152,7 +152,7 @@ for (int i = 0; i < prevX.size(); i++) {
 <v-clicks>
 
 - `a.getLerped(b, p)` : la couleur à la proportion `p` entre les deux — une **ligne droite dans le cube RGB**. « Interpoler » reviendra pour tout ce qu'on veut faire passer en douceur
-- Teinte = `i * 10` : le motif « nombre selon l'indice » du cours 08, avec le bon outil — un arc-en-ciel
+- Teinte = `i * 10` : le motif « nombre selon l'indice » du cours 07, avec le bon outil — un arc-en-ciel
 - Une couleur est un point à trois coordonnées : la **distance** entre deux couleurs se calcule comme entre deux points *(→ cours 12)*
 
 </v-clicks>
@@ -177,7 +177,7 @@ breadcrumb: 3 — La couleur / Cours 09
 
 <v-clicks>
 
-- **1 ·** Reprends le rendu du cours 08 : remplace les trois cosinus par **une teinte qui avance**
+- **1 ·** Reprends ta traînée évoluée (cours 07) : remplace les trois cosinus par **une teinte qui avance**
 - **2 ·** Colore les cercles du cours 03 avec une **teinte aléatoire** (saturation et luminosité fixes) — compare avec trois `ofRandom` : lequel donne des couleurs qui « vont ensemble » ?
 - **3 ·** 🔥 Fais tourner la teinte de la traînée avec le temps : `i * 10 + t * 40` — il faudra `fmod`
 

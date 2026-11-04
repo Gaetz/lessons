@@ -1,4 +1,4 @@
-#include "ofApp08.h"
+#include "ofApp07a.h"
 
 // i : indice dans la traînée (0 = le plus ancien). t : temps en secondes.
 void ofApp::forme(float x, float y, int i, float t, float r, float g, float b) {

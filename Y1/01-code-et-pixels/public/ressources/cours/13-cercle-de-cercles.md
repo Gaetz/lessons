@@ -1,6 +1,6 @@
 # Cours 13 — Trigonométrie : des cercles sur un cercle
 
-> **Avant** : cours 08 (cosinus pour osciller), cours 09 (la roue des teintes).
+> **Avant** : cours 07 (cosinus pour osciller), cours 09 (la roue des teintes).
 > **Comment travailler** : toujours dans `ofApp.h` et `ofApp.cpp`, par versions successives. `ofApp13.h` / `ofApp13.cpp` : la référence téléchargeable de l'état final.
 
 Douze cercles disposés régulièrement sur un cercle invisible, qui se rapprochent et s'éloignent du centre. Pour placer un point « à tel angle, à telle distance », il faut `cos` et `sin` — c'est le premier des quatre cours de trigonométrie.
@@ -32,7 +32,7 @@ Douze cercles blancs, régulièrement répartis sur un anneau. La formule à ret
 - Le signe `-` devant `sin` vient du repère de l'écran (cours 00) : `y` pointe vers le bas ; sans le `-`, les angles tourneraient dans le sens des aiguilles d'une montre.
 - Les angles sont en **radians** : un tour complet vaut `2π` (~6.28). openFrameworks fournit `PI` et `TWO_PI` — et `ofDegToRad(90)` si tu préfères penser en degrés. Pour répartir `n` cercles : le numéro `i` est à l'angle `i * TWO_PI / n`.
 
-Au cours 08, `cos(t)` faisait **osciller** un nombre. C'est le même `cos` : quand l'angle avance, le point tourne — et sa coordonnée `x` oscille.
+Au cours 07, `cos(t)` faisait **osciller** un nombre. C'est le même `cos` : quand l'angle avance, le point tourne — et sa coordonnée `x` oscille.
 
 > **Essaie** : `nbCercles` à 3, 7, puis 36. Puis change le rayon des petits cercles.
 
@@ -96,7 +96,7 @@ Dans le `.h` : `float t { 1 };`. Dans `update()` :
 	t = cos(ofGetElapsedTimef() * 0.6f);
 ```
 
-Et dans les formules : `cos(angle) * rayonOrbite * t` (pareil pour `y`). `t` oscille entre −1 et 1 (cours 08) : tous les cercles se rapprochent du centre, **traversent** de l'autre côté quand `t` devient négatif, et repartent. Une seule variable de temps, douze cercles qui respirent ensemble.
+Et dans les formules : `cos(angle) * rayonOrbite * t` (pareil pour `y`). `t` oscille entre −1 et 1 (cours 07) : tous les cercles se rapprochent du centre, **traversent** de l'autre côté quand `t` devient négatif, et repartent. Une seule variable de temps, douze cercles qui respirent ensemble.
 
 > **Essaie** : fais aussi **tourner** l'ensemble — ajoute `ofGetElapsedTimef()` à `angle`.
 

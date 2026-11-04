@@ -5,7 +5,8 @@
 // Sketch d'origine : Cours 3/sketch_05_First_special_fx
 // Notions : std::vector comme historique, push_back / erase(begin()),
 //           file de taille bornée, fonction de dessin réutilisée en boucle
-// Variante écartée : Cours 2022-2023/rendu03 (même principe, couvert par 07 + 08)
+// Variante écartée : Cours 2022-2023/rendu03 (même principe, couvert par le cours 07)
+// La version évoluée (couleur, transparence, taille) est dans ofApp07a.
 
 class ofApp : public ofBaseApp {
 public:

@@ -1,6 +1,6 @@
 # Tech Art 1 — conversion Processing (Python) → openFrameworks
 
-19 fichiers de référence (00 à 18), plus le bloc « couleur avancée » (09a sans code, 11a à 11g), un par notion, dans l'ordre pédagogique. Chaque paire `ofAppNN.h` / `ofAppNN.cpp` déclare la classe `ofApp` : un seul exemple est compilable à la fois dans un projet.
+Les fichiers de référence 00 à 18 (le 07 a deux paires, ofApp07 puis ofApp07a, comme le 00 ; le 08, en console, n'a pas de paire), plus le bloc « couleur avancée » (09a sans code, 11a à 11g), un par notion, dans l'ordre pédagogique. Chaque paire `ofAppNN.h` / `ofAppNN.cpp` déclare la classe `ofApp` : un seul exemple est compilable à la fois dans un projet.
 
 **Utilisation** : les leçons se suivent dans `ofApp.h` / `ofApp.cpp`, par étapes (voir chaque document). Les paires `ofAppNN` sont la référence de l'état final de chaque cours : pour en lancer une telle quelle, la copier dans `src/` et remplacer `#include "ofApp.h"` par `#include "ofAppNN.h"` dans `main.cpp`. Les images vont dans `bin/data/`.
 
@@ -17,9 +17,8 @@
 | 04 | Listes | Cours 2/04_First_lists + 2024-2025/sketch_01a_list | `std::vector`, `push_back`, `[i]`, `size()`, `std::cout`, `std::string` |
 | 05 | Cycle setup / update / draw, souris | Cours 1/03_Circle_follows_mouse | `update()` vs `draw()`, `mouseX`, membres de classe — relit 00 avec les mots |
 | 06 | Animation, vitesse, rebond | 2022-2023/rendu01_pde | delta time, `if`, vitesses en px/s, `cos` pour animer (explique le fond de 00) |
-| 07 | Traînée (historique) | Cours 3/sketch_05_First_special_fx | fonction de dessin à paramètres (explique `funnyFace` de 00), `vector` comme file bornée, `erase(begin())` |
-| 08 | Traînée évoluée | 2024-2025/sketch_02_trail | paramètres multiples, alpha et taille selon l'indice |
-| 09 | Couleur : RGB, HSB, dégradés | nouveau | `ofColor::fromHsb` (0–255 partout), teinte selon le temps et l'indice (relit 08), `getLerped`, `fmod` |
+| 07 | Traînée (historique), puis traînée évoluée | Cours 3/sketch_05_First_special_fx + 2024-2025/sketch_02_trail | fonction de dessin à paramètres (explique `funnyFace` de 00), `vector` comme file bornée, `erase(begin())` ; puis (ofApp07a) paramètres multiples, alpha et taille selon l'indice |
+| 09 | Couleur : RGB, HSB, dégradés | nouveau | `ofColor::fromHsb` (0–255 partout), teinte selon le temps et l'indice (relit 07), `getLerped`, `fmod` |
 | 09a | La couleur dans le jeu vidéo et le cinéma | nouveau, **sans code** | pipeline scène → écran → œil, gamut et écrans (sRGB, P3, Rec.2020), profondeur de bits et banding ; annonce 11a–11g |
 | 10 | Image et pixel | 2022-2023/rendu02 | `ofImage`, `bin/data`, `getColor`, `ofDrawBitmapString` |
 | 11 | Filtres par pixel | nouveau | double boucle sur tous les pixels, image source / résultat, `setColor` + `update()`, débordement des `unsigned char`, `keyPressed`, `switch` ; négatif, gris, luminosité, contraste, seuil, postérisation, puis rotation de teinte et color splash via HSB |
@@ -38,12 +37,12 @@
 | 17 | Convolution | nouveau | noyau 3×3, somme pondérée des voisins, bords, recalcul à la demande ; flou boîte, gaussien, netteté, contours, relief |
 | 18 | Projet final : peinture par particules | nouveau | synthèse en six étapes activables au clavier ; `ofFbo` comme toile persistante (seule nouveauté), `atan2`, contours calculés une fois pour piloter les traits |
 
-Ordre justifié : 00 est une création guidée avant toute théorie (c'était déjà le sketch 01 de la version 2024-2025) ; 01–04 sans état entre frames (statique + console) ; 05–06 introduisent le temps et relisent 00 avec le vocabulaire acquis ; 07–08 les fonctions et le `vector` en usage réel ; 09 la couleur comme valeur, juste avant les images, parce que HSB n'a pas besoin de pixels et que 08 bricole déjà des couleurs avec trois cosinus ; 09a est une fiche sans code sur le trajet de la couleur, lue après 09 ; 10–11 les ressources externes et la transformation pixel par pixel (la double boucle est introduite en 11, ce qui allège 12) ; 11a–11g forment un bloc optionnel « couleur avancée » qui réutilise la machine du 11 (11a est prérequis de 11b, 11e, 11f ; les autres sont indépendantes) ; 12–16 alternent trigonométrie et image : 14 (géométrie) demande `sin` et le temps de 13, la loupe et le tourbillon attendent les coordonnées polaires de 16 ; 17 est le cours le plus lourd et ouvre vers les shaders ; 18 est le projet final : des particules peignent l'image, chaque étape rappelle un cours et produit un rendu montrable, ce qui permet de noter sur la progression atteinte. Les sketches "Cours 5" étaient numérotés après les images dans le Drive ; ils restent en fin de parcours.
+Ordre justifié : 00 est une création guidée avant toute théorie (c'était déjà le sketch 01 de la version 2024-2025) ; 01–04 sans état entre frames (statique + console) ; 05–06 introduisent le temps et relisent 00 avec le vocabulaire acquis ; 07 les fonctions et le `vector` en usage réel (traînée, puis traînée évoluée en corrigé de son Autonomie) ; 09 la couleur comme valeur, juste avant les images, parce que HSB n'a pas besoin de pixels et que 07 bricole déjà des couleurs avec trois cosinus ; 09a est une fiche sans code sur le trajet de la couleur, lue après 09 ; 10–11 les ressources externes et la transformation pixel par pixel (la double boucle est introduite en 11, ce qui allège 12) ; 11a–11g forment un bloc optionnel « couleur avancée » qui réutilise la machine du 11 (11a est prérequis de 11b, 11e, 11f ; les autres sont indépendantes) ; 12–16 alternent trigonométrie et image : 14 (géométrie) demande `sin` et le temps de 13, la loupe et le tourbillon attendent les coordonnées polaires de 16 ; 17 est le cours le plus lourd et ouvre vers les shaders ; 18 est le projet final : des particules peignent l'image, chaque étape rappelle un cours et produit un rendu montrable, ce qui permet de noter sur la progression atteinte. Les sketches "Cours 5" étaient numérotés après les images dans le Drive ; ils restent en fin de parcours.
 
 ## Écartés
 
 - `sketch_02a_blqck_trail` — identique à `sketch_02_trail`, fond blanc
-- `rendu03` (2022-2023) — traînée avec bonhomme et dégradé, entièrement couverte par 07 + 08
+- `rendu03` (2022-2023) — traînée avec bonhomme et dégradé, entièrement couverte par le cours 07
 - `sketch_04a_circles`, `TrigoBlend` — variantes de 13, mentionnées en commentaire dans `ofApp13.cpp`
 - `sketch_03_image` — variante de 12, mentionnée en commentaire dans `ofApp12.cpp`
 - `Trail Felicien SABY.txt` — rendu d'étudiant
@@ -56,7 +55,7 @@ Correction apportée : `TrigoFlower.pyde` utilisait `flower_index` (non défini)
 - **Delta time partout.** Les sketches comptaient en frames (`t = t + 1`, `pos_x + 5`). Toutes les vitesses sont converties en unités par seconde avec `ofGetLastFrameTime()` ou `ofGetElapsedTimef()`, constantes ajustées pour retrouver la vitesse visuelle d'origine à 60 fps. Le fichier 06 introduit la notion ; 00 l'utilise sans l'expliquer.
 - **`update()` / `draw()` séparés** dès le fichier 05. Aucun appel de dessin dans `update()`, aucune mutation dans `draw()`.
 - **Globales → membres de classe.** Chaque `global x, y` de Python devient une déclaration dans le `.h`.
-- **Deux `vector` parallèles** pour les traînées (07, 08), fidèle aux sketches. `glm::vec2` est signalé en commentaire comme étape suivante.
+- **Deux `vector` parallèles** pour les traînées (07, 07a), fidèle aux sketches. `glm::vec2` est signalé en commentaire comme étape suivante.
 - **`std::cout`** plutôt que `ofLog` pour le fichier 04, afin d'enseigner le C++ standard ; l'équivalent OF est indiqué.
 - **`ofBeginShape`** plutôt que `ofPolyline` en 16 pour rester proche de `beginShape`/`vertex` ; `ofPolyline`/`ofPath` signalés.
 - **Fichiers sans sketch d'origine** (09, 11, 14, 17) : écrits directement pour openFrameworks. Les filtres lisent `source` et écrivent `resultat`, deux `ofImage` distinctes, avec `getColor`/`setColor` plutôt que le tableau de pixels, pour rester lisibles ; l'accès direct est donné en exercice de 17. L'effet se choisit au clavier (touches `0` à `9`) et le paramètre à la souris ; 17 ne recalcule que sur changement d'effet.

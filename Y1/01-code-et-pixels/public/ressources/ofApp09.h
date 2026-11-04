@@ -5,7 +5,7 @@
 // Nouveau : pas de sketch Processing d'origine
 // Notions : ofColor comme valeur manipulable, espace RGB (un cube à trois axes) et espace HSB
 //           (teinte / saturation / luminosité), ofColor::fromHsb, teinte selon le temps et
-//           selon l'indice (relit la traînée de 08), interpolation entre deux couleurs (getLerped)
+//           selon l'indice (relit la traînée évoluée de 07), interpolation entre deux couleurs (getLerped)
 
 class ofApp : public ofBaseApp {
 public:

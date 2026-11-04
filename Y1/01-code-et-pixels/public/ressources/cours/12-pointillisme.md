@@ -84,7 +84,7 @@ La variante d'un autre sketch, trois lignes :
 			ofDrawRectangle(co, li, tailleCercle * prop, tailleCercle * prop);
 ```
 
-Même mécanique, un `t` en plus dans la proportion : l'effet **grandit** — un anneau qui s'élargit depuis la souris. Combiner la distance et le temps (cours 08) donne des animations riches pour trois lignes.
+Même mécanique, un `t` en plus dans la proportion : l'effet **grandit** — un anneau qui s'élargit depuis la souris. Combiner la distance et le temps (cours 07) donne des animations riches pour trois lignes.
 
 > **Essaie** : ralentis (`* 10` au lieu de `* 60`), puis fais repartir l'anneau régulièrement avec `fmod` (cours 09).
 

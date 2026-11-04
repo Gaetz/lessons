@@ -23,7 +23,7 @@ breadcrumb: Le module
 <div class="mt-6 grid grid-cols-3 gap-6" style="margin-right:-6rem">
 
 <div v-click="0">
-<ZoomImage src="/ressources/cours/img/08-trainee.png" alt="Traînée de cercles colorés" class="h-44 w-full object-cover" />
+<ZoomImage src="/ressources/cours/img/07-trainee-evoluee.png" alt="Traînée de cercles colorés" class="h-44 w-full object-cover" />
 <p class="mt-1 text-xs op-60 text-center">des animations</p>
 </div>
 
@@ -62,7 +62,7 @@ breadcrumb: Le module
 <v-clicks>
 
 - **1 — Les bases** <span class="op-60 text-sm">dessiner, variables, boucles, listes (cours 00-05)</span>
-- **2 — Le mouvement** <span class="op-60 text-sm">animation, traînées (06-08)</span>
+- **2 — Le mouvement** <span class="op-60 text-sm">animation, traînées (06-07)</span>
 - **3 — La couleur** <span class="op-60 text-sm">RGB, HSB, la couleur au cinéma et dans le jeu (09, 09a)</span>
 - **4 — L'image et ses pixels** <span class="op-60 text-sm">lire, écrire, filtrer (10, 11)</span>
 - **5 — La géométrie** <span class="op-60 text-sm">distance, trigonométrie, transformations (12-16)</span>

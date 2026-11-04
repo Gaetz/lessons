@@ -1,6 +1,6 @@
 # Cours 09 — Couleur : RGB, HSB, dégradés
 
-> **Avant** : cours 08 (couleur animée par cosinus, traînée).
+> **Avant** : cours 07 (traînée, couleur animée par cosinus).
 > **Comment travailler** : toujours dans `ofApp.h` et `ofApp.cpp`, par versions successives. `ofApp09.h` / `ofApp09.cpp` : la référence téléchargeable de l'état final.
 
 Depuis le cours 00, une couleur est trois nombres : rouge, vert, bleu. C'est ainsi que l'**écran** travaille — pas ainsi que **nous** pensons la couleur. Ce cours introduit une deuxième manière de la décrire, la teinte, et un type pour la manipuler comme une valeur : `ofColor`.
@@ -9,7 +9,7 @@ Depuis le cours 00, une couleur est trois nombres : rouge, vert, bleu. C'est ain
 
 ## 1. Deux façons de décrire une couleur
 
-**RGB : un cube.** Une couleur RGB est un point dans un cube — trois axes, rouge, vert, bleu, chacun de 0 à 255. Le noir à l'origine, le blanc au sommet opposé. Pratique pour l'écran, pénible pour l'humain : « la même couleur, un peu plus claire » ou « la couleur suivante de l'arc-en-ciel » ne se calculent pas simplement dans ce cube. C'est pour ça que le cours 08 bricolait trois cosinus.
+**RGB : un cube.** Une couleur RGB est un point dans un cube — trois axes, rouge, vert, bleu, chacun de 0 à 255. Le noir à l'origine, le blanc au sommet opposé. Pratique pour l'écran, pénible pour l'humain : « la même couleur, un peu plus claire » ou « la couleur suivante de l'arc-en-ciel » ne se calculent pas simplement dans ce cube. C'est pour ça que le cours 07 bricolait trois cosinus.
 
 ![Cube RGB avec ses huit sommets colorés](img/09-cube-rgb.png)
 
@@ -62,7 +62,7 @@ Les nouveautés :
 Sous les bandes, deux cercles côte à côte — l'ancien monde et le nouveau :
 
 ```cpp
-	// la méthode du cours 08 : trois cosinus déphasés
+	// la méthode du cours 07 : trois cosinus déphasés
 	float r = (cos(t * 1.2f)  / 2 + 0.5f) * 255;
 	float g = (cos(t * 1.0f)  / 2 + 0.5f) * 255;
 	float b = (cos(t * 0.86f) / 2 + 0.5f) * 255;
@@ -75,7 +75,7 @@ Sous les bandes, deux cercles côte à côte — l'ancien monde et le nouveau :
 	ofDrawCircle(400, 260, 60);
 ```
 
-(Avec `t = ofGetElapsedTimef();` dans `update()`, comme au cours 08.) Laisse tourner et compare : à gauche ça bouge mais on ne contrôle rien — teintes sales, passages par le gris ; à droite, **toutes les couleurs pures, dans l'ordre**, sans jamais griser.
+(Avec `t = ofGetElapsedTimef();` dans `update()`, comme au cours 07.) Laisse tourner et compare : à gauche ça bouge mais on ne contrôle rien — teintes sales, passages par le gris ; à droite, **toutes les couleurs pures, dans l'ordre**, sans jamais griser.
 
 `fmod(a, b)` est le reste de la division pour les `float` : `t * 40` grandit sans fin, `fmod(t * 40, 255)` repart à 0 après 255 — la teinte fait le tour de la roue, encore et encore.
 
@@ -83,7 +83,7 @@ Sous les bandes, deux cercles côte à côte — l'ancien monde et le nouveau :
 
 ## 4. Étape 3 — la traînée arc-en-ciel
 
-Reprends la file de 25 positions des cours 07-08 (`prevX`, `prevY`, remplies dans `update()`), et dessine :
+Reprends la file de 25 positions du cours 07 (`prevX`, `prevY`, remplies dans `update()`), et dessine :
 
 ```cpp
 	for (int i = 0; i < prevX.size(); i++) {
@@ -92,7 +92,7 @@ Reprends la file de 25 positions des cours 07-08 (`prevX`, `prevY`, remplies dan
 	}
 ```
 
-La traînée du cours 08, en **une** ligne de couleur : la teinte vaut `i * 10`, la traînée est un arc-en-ciel. C'est le motif « nombre qui dépend de l'indice », avec le bon outil.
+La traînée évoluée du cours 07, en **une** ligne de couleur : la teinte vaut `i * 10`, la traînée est un arc-en-ciel. C'est le motif « nombre qui dépend de l'indice », avec le bon outil.
 
 > **Essaie** : fais tourner l'arc-en-ciel avec le temps — `i * 10 + t * 40`. Il faudra `fmod` pour rester sur la roue.
 
@@ -118,7 +118,7 @@ Retiens le mot : **interpoler**. Il reviendra pour des positions, des tailles �
 
 1. **Lire avant de lancer** — décris la bande produite par `ofColor::fromHsb(0, 255, p)` quand `p` va de 0 à 255. Puis celle de `fromHsb(p, 0, 255)`. Vérifie ensuite.
 
-2. **Le 08 apprivoisé** — reprends ton rendu du cours 08 et remplace les trois cosinus par une teinte qui avance (`fmod(t * 40, 255)`). Même vie, zéro gris.
+2. **La traînée apprivoisée** — reprends ta traînée évoluée du cours 07 et remplace les trois cosinus par une teinte qui avance (`fmod(t * 40, 255)`). Même vie, zéro gris.
 
 3. **Les couleurs qui vont ensemble** — les cercles du cours 03, colorés de deux façons : teinte aléatoire (saturation et luminosité fixes) contre trois `ofRandom` sur r, g, b. Lequel donne une palette harmonieuse, et pourquoi ?
 

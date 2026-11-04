@@ -236,8 +236,8 @@ def img07():
     c.text(pts[-1][0], pts[-1][1] + 45, 'i = 49', C(255, 255, 255), 12, 'mm')
     c.save('07-trainee-indices.png')
 
-# ---------- 08 ----------
-def img08():
+# ---------- 07a (traînée évoluée, deuxième partie du cours 07) ----------
+def img07a():
     c = Canvas(800, 800, (0, 0, 0))
     t = 2.0
     r = (math.cos(t * 1.2) / 2 + 0.5) * 255; g = (math.cos(t * 1.0) / 2 + 0.5) * 255; b = (math.cos(t * 0.86) / 2 + 0.5) * 255
@@ -248,7 +248,7 @@ def img08():
         tf = taille + variation * (25 - i) / 50
         c.circle(x, y, tf / 2, fill=C(r + off, g + off, b + off, off))
         c.circle(x, y, tf / 2, outline=C(r + off, g + off, b + off, 255 - off), width=2)
-    c.save('08-trainee.png', 0.5)
+    c.save('07-trainee-evoluee.png', 0.5)
 
 # ---------- 09 ----------
 def img09():
@@ -385,7 +385,7 @@ def img16():
 
 if __name__ == '__main__':
     import sys
-    todo = [img00, img01, img02, img03, img04, img05, img06, img07, img08, img09, img12, img13, img15, img16]
+    todo = [img00, img01, img02, img03, img04, img05, img06, img07, img07a, img09, img12, img13, img15, img16]
     if len(sys.argv) > 1: todo = [globals()['img' + a] for a in sys.argv[1:]]
     for f in todo:
         f()

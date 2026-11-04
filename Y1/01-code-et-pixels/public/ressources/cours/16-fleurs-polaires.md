@@ -95,7 +95,7 @@ Range ensuite la fleur dans une fonction `drawFlower(int fIndex, float r, float 
 
 Quatorze rayons décroissants (`150 - f * 10`) : des fleurs emboîtées, les extérieures lentes, les intérieures rapides.
 
-> **Essaie** : une seule fleur dont `period` dépend de la souris — `period` est un entier, donc `mouseX / 50` (division entière assumée !). Puis fais **pulser** `amplitude` avec le temps (cours 08).
+> **Essaie** : une seule fleur dont `period` dépend de la souris — `period` est un entier, donc `mouseX / 50` (division entière assumée !). Puis fais **pulser** `amplitude` avec le temps (cours 07).
 
 ## 4. Étape 3 — le mode additif au travail
 

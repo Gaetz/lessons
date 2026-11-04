@@ -1719,8 +1719,8 @@ Le dernier cercle d'une ligne a la même taille et la même couleur que le premi
 </div>
 
 <!--
-Le premier vrai travail en autonomie : prévoir du temps. Le 08 sera le
-corrigé d'un exercice similaire au 07.
+Le premier vrai travail en autonomie : prévoir du temps. La traînée évoluée
+(deuxième partie du 07) sera le corrigé d'un exercice similaire.
 -->
 
 ---
