@@ -1,6 +1,6 @@
 # Cours 08 — Les `struct` : regrouper ce qui va ensemble
 
-> **Avant** : cours 06 bis (`if`, `for`, `rand`), cours 06 ter (`string`, `vector`, objets), cours 07 (la `struct Position`, les paramètres copiés).
+> **Avant** : cours 06 bis (`if`, `for`, `rand`), cours 06 ter (`string`, `vector`, objets), cours 06 quater (fonctions, `return`, portée), cours 07 (la `struct Position`, les paramètres copiés).
 > **Comment travailler** : deux **programmes console** (pas d'openFrameworks), un par partie. Dans Visual Studio, crée un projet *Application console* pour le combat Pokémon (tout dans `main.cpp`), puis un **deuxième projet** pour le dossier étudiant — c'est lui qu'on découpera en plusieurs fichiers.
 
 Au cours 07, tu as aperçu la `struct` : deux `float` collés dans une boîte `Position`. Ce cours en fait l'outil central. Un Pokémon, c'est un nom, un type, un niveau, des points de vie, cinq statistiques et une liste d'attaques : quatorze informations qui **vont ensemble**. La `struct` les range dans une seule boîte à compartiments — et en deuxième partie, elle apprendra aussi à **faire** des choses, avec ses propres fonctions.
